@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectSession>
+    <PathDelim Value="\"/>
+    <Version Value="9"/>
+    <BuildModes Active="Default"/>
+    <Units Count="1">
+      <Unit0>
+        <Filename Value="zup.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="16"/>
+        <CursorPos X="11" Y="34"/>
+        <UsageCount Value="20"/>
+        <Loaded Value="True"/>
+      </Unit0>
+    </Units>
+    <JumpHistory Count="2" HistoryIndex="1">
+      <Position1>
+        <Filename Value="zup.lpr"/>
+        <Caret Line="35" Column="16"/>
+      </Position1>
+      <Position2>
+        <Filename Value="zup.lpr"/>
+        <Caret Line="27" Column="37" TopLine="19"/>
+      </Position2>
+    </JumpHistory>
+  </ProjectSession>
+</CONFIG>
