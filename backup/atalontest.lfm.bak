@@ -1,45 +1,43 @@
 object AtalonTestForm: TAtalonTestForm
-  Left = 0
+  Left = 373
   Height = 296
-  Top = 0
+  Top = 197
   Width = 597
   Caption = 'AtalonTestForm'
   ClientHeight = 296
   ClientWidth = 597
-  DragMode = dmAutomatic
-  OnShow = FormShow
-  LCLVersion = '1.3'
+  LCLVersion = '1.2.6.0'
   object Panel1: TPanel
     Left = 0
-    Height = 58
+    Height = 42
     Top = 0
     Width = 597
     Align = alTop
-    ClientHeight = 58
+    ClientHeight = 42
     ClientWidth = 597
     TabOrder = 0
     object GroupBox1: TGroupBox
       Left = 1
-      Height = 56
+      Height = 40
       Top = 1
       Width = 295
       Align = alLeft
       Caption = 'Программа'
-      ClientHeight = 36
+      ClientHeight = 22
       ClientWidth = 291
       TabOrder = 0
       object Edit1: TEdit
         Left = 0
-        Height = 36
+        Height = 22
         Top = 0
         Width = 264
         Align = alClient
         TabOrder = 0
-        Text = '"%t/%n.exe"'
+        Text = '%t/%n.exe'
       end
       object Button1: TButton
         Left = 264
-        Height = 36
+        Height = 22
         Top = 0
         Width = 27
         Align = alRight
@@ -50,17 +48,17 @@ object AtalonTestForm: TAtalonTestForm
     end
     object GroupBox2: TGroupBox
       Left = 296
-      Height = 56
+      Height = 40
       Top = 1
       Width = 300
       Align = alClient
       Caption = 'Эталон'
-      ClientHeight = 36
+      ClientHeight = 22
       ClientWidth = 296
       TabOrder = 1
       object Edit2: TEdit
         Left = 0
-        Height = 36
+        Height = 22
         Top = 0
         Width = 269
         Align = alClient
@@ -68,7 +66,7 @@ object AtalonTestForm: TAtalonTestForm
       end
       object Button2: TButton
         Left = 269
-        Height = 36
+        Height = 22
         Top = 0
         Width = 27
         Align = alRight
@@ -89,18 +87,18 @@ object AtalonTestForm: TAtalonTestForm
   end
   object GroupBox3: TGroupBox
     Left = 0
-    Height = 154
-    Top = 108
+    Height = 170
+    Top = 92
     Width = 185
     Align = alLeft
     Caption = 'Входной тест'
-    ClientHeight = 134
+    ClientHeight = 152
     ClientWidth = 181
     TabOrder = 2
     OnClick = GroupBox3Click
     inline SynEdit1: TSynEdit
       Left = 0
-      Height = 134
+      Height = 152
       Top = 0
       Width = 181
       Align = alClient
@@ -539,6 +537,9 @@ object AtalonTestForm: TAtalonTestForm
       MouseActions = <>
       MouseTextActions = <>
       MouseSelActions = <>
+      Lines.Strings = (
+        'SynEdit1'
+      )
       VisibleSpecialChars = [vscSpace, vscTabAtLast]
       SelectedColor.FrameEdges = sfeAround
       SelectedColor.BackPriority = 50
@@ -603,17 +604,17 @@ object AtalonTestForm: TAtalonTestForm
   end
   object GroupBox4: TGroupBox
     Left = 412
-    Height = 154
-    Top = 108
+    Height = 170
+    Top = 92
     Width = 185
     Align = alRight
     Caption = 'Вывод эталона'
-    ClientHeight = 134
+    ClientHeight = 152
     ClientWidth = 181
     TabOrder = 3
     inline SynEdit3: TSynEdit
       Left = 0
-      Height = 134
+      Height = 152
       Top = 0
       Width = 181
       Align = alClient
@@ -1052,6 +1053,9 @@ object AtalonTestForm: TAtalonTestForm
       MouseActions = <>
       MouseTextActions = <>
       MouseSelActions = <>
+      Lines.Strings = (
+        'SynEdit1'
+      )
       VisibleSpecialChars = [vscSpace, vscTabAtLast]
       SelectedColor.FrameEdges = sfeAround
       SelectedColor.BackPriority = 50
@@ -1116,17 +1120,17 @@ object AtalonTestForm: TAtalonTestForm
   end
   object GroupBox5: TGroupBox
     Left = 190
-    Height = 154
-    Top = 108
+    Height = 170
+    Top = 92
     Width = 217
     Align = alClient
     Caption = 'Вывод программы'
-    ClientHeight = 134
+    ClientHeight = 152
     ClientWidth = 213
     TabOrder = 4
     inline SynEdit2: TSynEdit
       Left = 0
-      Height = 134
+      Height = 152
       Top = 0
       Width = 213
       Align = alClient
@@ -1565,6 +1569,9 @@ object AtalonTestForm: TAtalonTestForm
       MouseActions = <>
       MouseTextActions = <>
       MouseSelActions = <>
+      Lines.Strings = (
+        'SynEdit1'
+      )
       VisibleSpecialChars = [vscSpace, vscTabAtLast]
       SelectedColor.FrameEdges = sfeAround
       SelectedColor.BackPriority = 50
@@ -1629,30 +1636,28 @@ object AtalonTestForm: TAtalonTestForm
   end
   object Splitter1: TSplitter
     Left = 407
-    Height = 154
-    Top = 108
+    Height = 170
+    Top = 92
     Width = 5
     Align = alRight
     ResizeAnchor = akRight
   end
   object Splitter2: TSplitter
     Left = 185
-    Height = 154
-    Top = 108
+    Height = 170
+    Top = 92
     Width = 5
-    OnChangeBounds = Splitter2ChangeBounds
   end
   object Panel4: TPanel
     Left = 0
     Height = 50
-    Top = 58
+    Top = 42
     Width = 597
     Align = alTop
     Caption = 'Panel4'
     ClientHeight = 50
     ClientWidth = 597
     TabOrder = 7
-    OnClick = Panel4Click
     object Button3: TButton
       Left = 443
       Height = 48
@@ -1744,7 +1749,7 @@ object AtalonTestForm: TAtalonTestForm
     Interval = 100
     OnTimer = Timer1Timer
     OnStopTimer = Timer1StopTimer
-    left = 416
+    left = 384
     top = 48
   end
   object Process1: TAsyncProcess
@@ -1760,7 +1765,7 @@ object AtalonTestForm: TAtalonTestForm
     WindowTop = 0
     WindowWidth = 0
     FillAttribute = 0
-    left = 244
-    top = 59
+    left = 320
+    top = 56
   end
 end

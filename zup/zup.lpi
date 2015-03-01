@@ -29,6 +29,7 @@
     <RunParams>
       <local>
         <FormatVersion Value="1"/>
+        <CommandLineParams Value="ZyablicIDE.exe ZyablicIDE.exe.tmp ZyablicIDE.exe version.inf.tmp version.inf bin/fpc.exe.tmp bin/fpc.exe bin/ppc386.exe.tmp bin/ppc386.exe bin/fpintres.o.tmp bin/fpintres.o bin/fpintres.ppu.tmp bin/fpintres.ppu bin/libimpfpintres.a.tmp bin/libimpfpintres.a bin/libimpsystem.a.tmp bin/libimpsystem.a bin/sysinitpas.o.tmp bin/sysinitpas.o bin/sysinitpas.ppu.tmp bin/sysinitpas.ppu bin/system.o.tmp bin/system.o"/>
       </local>
     </RunParams>
     <Units Count="1">
@@ -42,7 +43,7 @@
     <Version Value="11"/>
     <PathDelim Value="\"/>
     <Target>
-      <Filename Value="..\bin\$(TargetCPU)-$(TargetOS)\zup"/>
+      <Filename Value="..\bin\$(TargetCPU)-$(TargetOS)-$(LCLWidgetType)\zup"/>
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>

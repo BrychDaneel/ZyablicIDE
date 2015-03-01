@@ -7,7 +7,8 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, main, GDBIO, settings, ansiitable, lience, about, AtalonTest;
+  Forms, main, GDBIO, settings, ansiitable, lience, about, AtalonTest,
+  lazcontrols, Multitest, calculator;
 
 {$R *.res}
 
@@ -21,6 +22,8 @@ begin
   Application.CreateForm(TLienceForm, LienceForm);
   Application.CreateForm(TAboutForm, AboutForm);
   Application.CreateForm(TAtalonTestForm, AtalonTestForm);
+  Application.CreateForm(TMultiTestForm, MultiTestForm);
+  Application.CreateForm(TCalculatorForm, CalculatorForm);
   Application.Run;
 end.
 

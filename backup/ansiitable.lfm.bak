@@ -1,14 +1,13 @@
 object AnsiiTableForm: TAnsiiTableForm
-  Left = 0
+  Left = 486
   Height = 364
-  Top = 0
+  Top = 263
   Width = 325
   Caption = 'AnsiiTableForm'
   ClientHeight = 364
   ClientWidth = 325
   OnCreate = FormCreate
-  OnShow = FormShow
-  LCLVersion = '1.3'
+  LCLVersion = '1.2.6.0'
   object Panel1: TPanel
     Left = 0
     Height = 40

@@ -8,21 +8,33 @@ uses
   {$ENDIF}{$ENDIF}
   Classes,sysutils,process
   { you can add units after this };
-const maxpop=20;
+const maxpop=40;
 var pr:TProcess;
   b:boolean;
-  pop:longint;
+  pop,i:longint;
+  q, qq: string;
+  par:TStringList;
 begin
+  WriteLn('Start');
+
+ for i:=0 to (Paramcount-1) div 2-1 do
+ begin
+ WriteLn(i+1,'st file');
+
  pop:=0;
+ q:=ParamStr(i*2+1);
+ qq:=ParamStr(i*2+2);
  repeat
- sleep(100);
  inc(pop);
- WriteLn('Deleting File '+ParamStr(2));
- b:=DeleteFile(ParamStr(2));
- If b then WriteLn('Sucsess') else  WriteLn('Error');
+ WriteLn('Deleting File '+qq);
+ b:=DeleteFile(qq);
+ If b then WriteLn('Sucsess') else    begin
+   WriteLn('Error');
+    sleep(100);
+   end;
  until b or (pop>maxpop);
 
- If pop>0 then
+ If not b then
  begin
       writeln('Can not remove file. ');
       exit;
@@ -30,23 +42,30 @@ begin
 
  pop:=0;
  repeat
- sleep(100);
  inc(pop);
- WriteLn('Renaming File '+ParamStr(1)+' -> '+ParamStr(2));
- RenameFile(ParamStr(1),ParamStr(2));
- If b then WriteLn('Sucsess') else  WriteLn('Error');
+ WriteLn('Renaming File '+q+' -> '+qq);
+ b:=RenameFile(q,qq);
+ If b then WriteLn('Sucsess') else
+   begin
+   WriteLn('Error');
+    sleep(100);
+   end;
  until b or (pop>maxpop);
 
- If pop>0 then
+ If not b then
  begin
       writeln('Can not rename file');
       exit;
  end;
+ end;
 
 
- WriteLn('Start aplication '+ParamStr(2));
- pr:=TProcess.Create(nil);
- pr.CommandLine:=ParamStr(2);
+ If odd(Paramcount) then
+ begin
+
+ WriteLn('Start aplication ',ParamStr(Paramcount));
+ pr:=TProcess.Create(Nil);
+ pr.CommandLine:=ParamStr(Paramcount);
  pr.Options:=pr.Options+[poNewProcessGroup];
  try
  pr.Execute;
@@ -54,5 +73,7 @@ begin
  WriteLn('Error');
  end;
  pr.Free;
+ end;
+
 end.
 

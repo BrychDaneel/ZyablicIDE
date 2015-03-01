@@ -37,6 +37,7 @@ type
     procedure Edit5Change(Sender: TObject);
     procedure Edit6Change(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
     procedure GroupBox2Click(Sender: TObject);
   private
     { private declarations }
@@ -113,6 +114,12 @@ begin
   Edit4.Text:=GdbComand;
   Edit5.Text:=youname;
   Edit6.Text:=email;
+end;
+
+procedure TSettingForm.FormShow(Sender: TObject);
+begin
+    (Sender as TForm).Left:=(Screen.Width - (Sender as TForm).Width) div 2;
+  (Sender as TForm).Top:=(Screen.Height - (Sender as TForm).Height) div 2;
 end;
 
 procedure TSettingForm.GroupBox2Click(Sender: TObject);

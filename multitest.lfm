@@ -1,0 +1,187 @@
+object MultiTestForm: TMultiTestForm
+  Left = 370
+  Height = 97
+  Top = 163
+  Width = 509
+  AutoSize = True
+  Caption = 'MultiTestForm'
+  ClientHeight = 97
+  ClientWidth = 509
+  OnShow = FormShow
+  LCLVersion = '1.3'
+  object Panel4: TPanel
+    Left = 0
+    Height = 50
+    Top = 43
+    Width = 509
+    Align = alTop
+    Caption = 'Panel4'
+    ClientHeight = 50
+    ClientWidth = 509
+    TabOrder = 0
+    object Button3: TButton
+      Left = 443
+      Height = 48
+      Top = 1
+      Width = 65
+      Align = alClient
+      Caption = 'Запуск'
+      OnClick = Button3Click
+      TabOrder = 0
+    end
+    object Panel3: TPanel
+      Left = 1
+      Height = 48
+      Top = 1
+      Width = 442
+      Align = alLeft
+      AutoSize = True
+      ClientHeight = 48
+      ClientWidth = 442
+      TabOrder = 1
+      object CheckBox1: TCheckBox
+        Left = 2
+        Height = 19
+        Top = 1
+        Width = 210
+        Caption = 'Учитывать пробелы в конце строк'
+        TabOrder = 0
+      end
+      object RadioButton1: TRadioButton
+        Left = 1
+        Height = 19
+        Top = 24
+        Width = 128
+        Caption = 'Клавиатурный ввод'
+        Checked = True
+        TabOrder = 2
+        TabStop = True
+      end
+      object RadioButton2: TRadioButton
+        Left = 145
+        Height = 19
+        Top = 24
+        Width = 99
+        Caption = 'Ввод из фалов'
+        OnChange = RadioButton2Change
+        TabOrder = 1
+      end
+      object Label1: TLabel
+        Left = 257
+        Height = 15
+        Top = 5
+        Width = 71
+        Caption = 'Входной фал'
+        ParentColor = False
+      end
+      object Edit3: TEdit
+        Left = 345
+        Height = 23
+        Top = 1
+        Width = 96
+        Enabled = False
+        TabOrder = 3
+        Text = 'input.txt'
+      end
+      object Label2: TLabel
+        Left = 257
+        Height = 15
+        Top = 28
+        Width = 80
+        Caption = 'Выходной фал'
+        ParentColor = False
+      end
+      object Edit4: TEdit
+        Left = 345
+        Height = 23
+        Top = 24
+        Width = 96
+        Enabled = False
+        TabOrder = 4
+        Text = 'output.txt'
+      end
+    end
+  end
+  object GroupBox1: TGroupBox
+    Left = 0
+    Height = 43
+    Top = 0
+    Width = 509
+    Align = alTop
+    AutoSize = True
+    Caption = 'Программа'
+    ClientHeight = 23
+    ClientWidth = 505
+    TabOrder = 1
+    object FileNameEdit1: TFileNameEdit
+      Left = 0
+      Height = 23
+      Top = 0
+      Width = 401
+      FileName = '%t/%n.exe'
+      FilterIndex = 0
+      HideDirectories = False
+      ButtonWidth = 23
+      NumGlyphs = 1
+      Align = alClient
+      MaxLength = 0
+      TabOrder = 0
+      Text = '%t/%n.exe'
+    end
+    object SpinEdit1: TSpinEdit
+      Left = 455
+      Height = 23
+      Top = 0
+      Width = 50
+      Align = alRight
+      MaxValue = 20
+      OnChange = SpinEdit1Change
+      OnChangeBounds = SpinEdit1ChangeBounds
+      TabOrder = 1
+    end
+    object Label3: TLabel
+      Left = 401
+      Height = 23
+      Top = 0
+      Width = 54
+      Align = alRight
+      Caption = '     Тэсты: '
+      Layout = tlCenter
+      ParentColor = False
+    end
+  end
+  object ScrollBox1: TScrollBox
+    Left = 0
+    Height = 4
+    Top = 93
+    Width = 509
+    HorzScrollBar.Page = 1
+    VertScrollBar.Page = 1
+    Align = alClient
+    AutoSize = True
+    TabOrder = 2
+  end
+  object TestProcess: TProcessUTF8
+    Active = False
+    Options = [poRunSuspended, poUsePipes]
+    Priority = ppNormal
+    StartupOptions = [suoUseShowWindow]
+    ShowWindow = swoHIDE
+    WindowColumns = 0
+    WindowHeight = 0
+    WindowLeft = 0
+    WindowRows = 0
+    WindowTop = 0
+    WindowWidth = 0
+    FillAttribute = 0
+    left = 264
+    top = 136
+  end
+  object TestOutputTimer: TTimer
+    Enabled = False
+    Interval = 100
+    OnTimer = TestOutputTimerTimer
+    left = 160
+    top = 128
+  end
+end

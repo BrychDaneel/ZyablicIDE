@@ -16,7 +16,6 @@ type
     Memo1: TMemo;
     Memo2: TMemo;
     Panel1: TPanel;
-    procedure FormShow(Sender: TObject);
   private
     { private declarations }
   public
@@ -29,14 +28,6 @@ var
 implementation
 
 {$R *.lfm}
-
-{ TLienceForm }
-
-procedure TLienceForm.FormShow(Sender: TObject);
-begin
-    (Sender as TForm).Left:=(Screen.Width - (Sender as TForm).Width) div 2;
-  (Sender as TForm).Top:=(Screen.Height - (Sender as TForm).Height) div 2;
-end;
 
 end.
 

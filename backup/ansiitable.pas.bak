@@ -25,7 +25,6 @@ type
     procedure Edit2Change(Sender: TObject);
     procedure Edit2KeyPress(Sender: TObject; var Key: char);
     procedure FormCreate(Sender: TObject);
-    procedure FormShow(Sender: TObject);
     procedure SpinEdit1Change(Sender: TObject);
     procedure StringGrid1SelectCell(Sender: TObject; aCol, aRow: Integer;
       var CanSelect: Boolean);
@@ -50,12 +49,6 @@ var i,ii:longint;
 begin
   For i:=0 to 15 do
   for ii:=0 to 15 do StringGrid1.Cells[ii,i]:=AnsiToUtf8(char(i*16+ii));
-end;
-
-procedure TAnsiiTableForm.FormShow(Sender: TObject);
-begin
-      (Sender as TForm).Left:=(Screen.Width - (Sender as TForm).Width) div 2;
-  (Sender as TForm).Top:=(Screen.Height - (Sender as TForm).Height) div 2;
 end;
 
 procedure TAnsiiTableForm.SpinEdit1Change(Sender: TObject);
@@ -87,13 +80,13 @@ s:=Edit2.Text;
 a:=0;
 if length(s)>0 then
 case s[1] of
-'A'..'Z':a:=ord(s[1])-ORD('A')+10;
+'A'..'Z':a:=ord(s[1])-ORD('A');
 '0'..'9':a:=ord(s[1])-ORD('0');
 end;
 
 if length(s)>1 then
 case s[2] of
-'A'..'Z':a:=a*16+ord(s[2])-ORD('A')+10;
+'A'..'Z':a:=a*16+ord(s[2])-ORD('A');
 '0'..'9':a:=a*16+ord(s[2])-ORD('0');
 end;
 

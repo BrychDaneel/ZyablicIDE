@@ -1,13 +1,12 @@
 object LienceForm: TLienceForm
-  Left = 0
+  Left = 696
   Height = 636
-  Top = 0
+  Top = 168
   Width = 554
   Caption = 'LienceForm'
   ClientHeight = 636
   ClientWidth = 554
-  OnShow = FormShow
-  LCLVersion = '1.3'
+  LCLVersion = '1.2.6.0'
   object Panel1: TPanel
     Left = 0
     Height = 272
@@ -25,7 +24,7 @@ object LienceForm: TLienceForm
       Align = alClient
       Lines.Strings = (
         'ZyablicIDE '
-        'Copyright  Brychikov Daneel <BrychDaneel@mail.ru>, 2015'
+        '@Brychikov Daneel <BrychDaneel@mail.ru>, 2015'
         ''
         'Данная программа является свободным программным обеспечением. Вы вправе '
         'распространять ее и/или модифицировать в соответствии с условиями версии 2 либо по '
@@ -274,7 +273,7 @@ object LienceForm: TLienceForm
       'PROGRAMS), EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE'
       'POSSIBILITY OF SUCH DAMAGES.'
       ''
-      ''
+      '                     END OF TERMS AND CONDITIONS'
       ''
       ''
       ''

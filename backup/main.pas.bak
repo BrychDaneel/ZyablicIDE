@@ -5,50 +5,26 @@ unit Main;
 interface
 
 uses
-  Classes, SysUtils, process, FileUtil, UTF8Process, SynEdit, SynHighlighterPas,
-  SynMemo, Forms, Controls, Graphics, Dialogs, ComCtrls, ExtCtrls, StdCtrls,
-  Menus, SynEditMarks, SynEditTypes, SynHighlighterCpp, LCLType, ExtDlgs, Grids,
-  dateutils, LazUTF8Classes, lazutf8, types;
+  Classes, SysUtils, process, ServiceManager, FileUtil, UTF8Process, SynEdit,
+  SynHighlighterPas, SynMemo, Forms, Controls, Graphics, Dialogs, ComCtrls,
+  ExtCtrls, StdCtrls, Menus, Grids, SynEditMarks, SynEditTypes, LCLType,
+  AsyncProcess, ValEdit, Calendar, ExtDlgs, types, dateutils;
 
 type
   { TMainForm }
 
   TMainForm = class(TForm)
-    MainSynEdit: TSynEdit;
-    MenuItem12: TMenuItem;
-    MenuItem34: TMenuItem;
-    MenuItem35: TMenuItem;
-    MenuItem36: TMenuItem;
-    MenuItemRemove: TMenuItem;
-    MenuItem22: TMenuItem;
-    CompProcess: TProcessUTF8;
-    GDBProcess: TProcessUTF8;
-    EditMenu: TPopupMenu;
-    MenuItem23: TMenuItem;
-    MenuItem25: TMenuItem;
-    MenuItem26: TMenuItem;
-    MenuItem27: TMenuItem;
-    MenuItem28: TMenuItem;
-    MenuItem29: TMenuItem;
-    MenuItem30: TMenuItem;
-    MenuItem31: TMenuItem;
-    MenuItem32: TMenuItem;
-    MenuItem33: TMenuItem;
-    TabsPopupMenu: TPopupMenu;
-    RunProcess: TProcessUTF8;
-    TabControl1: TTabControl;
-    WatchGrid: TStringGrid;
-    SynCppSyn1: TSynCppSyn;
-    BrLineTimer: TTimer;
-    UpdateProcess: TProcessUTF8;
     CalculatorDialog1: TCalculatorDialog;
+    GDBProcess: TAsyncProcess;
+    CompProcess: TAsyncProcess;
+    RunProcess: TAsyncProcess;
     BookMarkImageList: TImageList;
     FindDialog1: TFindDialog;
     MenuImageList: TImageList;
     MenuItem1: TMenuItem;
     MenuItem10: TMenuItem;
     MenuItem11: TMenuItem;
-    MenuItemMultitest: TMenuItem;
+    MenuItem12: TMenuItem;
     MenuItem14: TMenuItem;
     MenuItem15: TMenuItem;
     MenuItem18: TMenuItem;
@@ -111,11 +87,14 @@ type
     CompilMessageTimer: TTimer;
     GDBMessageTimer: TTimer;
     RunMessageTimer: TTimer;
+    WatchValueListEditor: TValueListEditor;
     WatchPanel: TPanel;
+    SynEditPanel: TPanel;
     MessagePanel: TPanel;
     Splitter1: TSplitter;
     InputSynEdit: TSynEdit;
     OutputSynEdit: TSynEdit;
+    MainSynEdit: TSynEdit;
     MessageSynMemo: TSynMemo;
     SynPasSyn1: TSynPasSyn;
     TerminalEdit: TEdit;
@@ -129,6 +108,7 @@ type
     HorizontalSplitter: TSplitter;
     MidleToolBar: TToolBar;
     IOToolBar: TToolBar;
+    TabControl1: TTabControl;
     ToolButton1: TToolButton;
     ToolButton10: TToolButton;
     ToolButton11: TToolButton;
@@ -156,26 +136,13 @@ type
     VerticalSplitter: TSplitter;
     Status: TStatusBar;
     BotonTabControl: TTabControl;
-    procedure BrLineTimerStartTimer(Sender: TObject);
-    procedure BrLineTimerTimer(Sender: TObject);
     procedure CompilMessageTimerTimer(Sender: TObject);
     procedure BotonTabControlChange(Sender: TObject);
-    procedure ExtendedTabToolbar1ChangeBounds(Sender: TObject);
-    procedure ExtendedTabToolbar1ContextPopup(Sender: TObject;
-      MousePos: TPoint; var Handled: Boolean);
-    procedure FormKeyPress(Sender: TObject; var Key: char);
-    procedure FormShow(Sender: TObject);
-    procedure MainSynEditClick(Sender: TObject);
-    procedure MenuItemMultitestClick(Sender: TObject);
-    procedure MenuItemRemoveClick(Sender: TObject);
-    procedure TabControl1Change(Sender: TObject);
     procedure FindDialog1Find(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
-    procedure FormDropFiles(Sender: TObject; const FileNames: array of String);
     procedure GDBMessageTimerStopTimer(Sender: TObject);
     procedure GDBMessageTimerTimer(Sender: TObject);
-    procedure HorizontalSplitterChangeBounds(Sender: TObject);
     procedure InputNameEditChange(Sender: TObject);
     procedure MainSynEditGutterClick(Sender: TObject; X, Y, Line: integer;
       mark: TSynEditMark);
@@ -191,7 +158,6 @@ type
     procedure MenuItem14Click(Sender: TObject);
     procedure MenuItem18Click(Sender: TObject);
     procedure MenuItem1CopyClick(Sender: TObject);
-    procedure MenuItem22Click(Sender: TObject);
     procedure MenuItem7Click(Sender: TObject);
     procedure MenuItem8Click(Sender: TObject);
     procedure MenuItemAboutClick(Sender: TObject);
@@ -230,13 +196,8 @@ type
     procedure ReplaceDialog1Replace(Sender: TObject);
     procedure RunMessageTimerStopTimer(Sender: TObject);
     procedure RunMessageTimerTimer(Sender: TObject);
-    procedure Splitter1ChangeBounds(Sender: TObject);
     procedure StatusTimerTimer(Sender: TObject);
-    procedure TabControl1ChangeBounds(Sender: TObject);
-    procedure TabControl1Changing(Sender: TObject; var AllowChange: Boolean);
-    procedure WatchGridEditingDone(Sender: TObject);
-    procedure WatchGridSelectCell(Sender: TObject; aCol, aRow: Integer;
-      var CanSelect: Boolean);
+    procedure TabControl1Change(Sender: TObject);
     procedure Reselect(new:SmallInt);
     procedure SaveFile(index:SmallInt);
     procedure SaveFileAs(index:SmallInt);
@@ -251,15 +212,20 @@ type
     procedure SetRunButtons(Erun,Estop:boolean);
     procedure ParseByLine(var source,s:string);
     procedure breakline(s:string);
-    procedure VerticalSplitterChangeBounds(Sender: TObject);
+    procedure WatchValueListEditorColRowDeleted(Sender: TObject;
+      IsColumn: Boolean; sIndex, tIndex: Integer);
+    procedure WatchValueListEditorExit(Sender: TObject);
+    procedure WatchValueListEditorGetEditText(Sender: TObject; ACol,
+      ARow: Integer; var Value: string);
+    procedure WatchValueListEditorSelectCell(Sender: TObject; aCol,
+      aRow: Integer; var CanSelect: Boolean);
     Procedure WriteGDB(s:string);
+    Procedure ChangeWatch(ACol,ARow:integer;OldValue,NewValue:string);
     Procedure LockInterface;
     Procedure UnLockInterface;
     function LinuxStyleSlash(s:string):string;
     function WindowsStyleSlash(s:string):string;
     procedure CorrectWatch(var s:string);
-    procedure openfile(const filename:string);
-    procedure UpdateWatch;
   private
     { private declarations }
   public
@@ -267,13 +233,13 @@ type
     { public declarations }
   end;
 
-  function AddDefines(s:String):String;
-  function readOutputData(process:TProcess):string;
+  function AddDefines(s:string):string;
+  function readOutputData(process:TAsyncProcess):string;
 var
   MainForm: TMainForm;
    WaitForExecute:boolean=false;
        GNUGPL:string='{'+LineEnding+
-   '%n'+LineEnding+
+   '$FILENAME'+LineEnding+
             LineEnding+
    'Copyright $YEAR $NAME <$EMAIL>'+LineEnding+
                                                   LineEnding+
@@ -292,26 +258,13 @@ var
    'Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,' +LineEnding+
    'MA 02110-1301, USA.' +LineEnding+
    '}' +LineEnding;
-
-   blank:string ='program Untitle;'+LineEnding+
-   'var '+LineEnding+
-   'begin' +LineEnding+
-   LineEnding+
-   'end.';
-
-   youname:string='Brychikov Daneel';
+   youname:string='Daneel';
    email:string='BrychDaneel@mail.ru';
 
-   CompileCommand,RunComand,GdbComand,BuildCommand:string;
-   wantUpdate:boolean=false;
-   {$IFDEF WINDOWS}
-   slash:string='\';
-   {$ELSE}
-   slash:string='/';
-   {$ENDIF}
+   CompileCommand,RunComand,GdbComand:string;
 
 implementation
- uses GDBIO,settings,ansiitable,lience,about,AtalonTest,Multitest, calculator;
+ uses GDBIO,settings,ansiitable,lience,about,AtalonTest;
 {$R *.lfm}
 
 { TMainForm }
@@ -320,13 +273,13 @@ WriteProgramState=(wpsEdit,wpsCompil,wpsRun,wpsDebug);
 MyInputType=(iptFile,iptConsole,iptEmulate);
 
 Myfile=record
-name,fullpath:String;
+name,fullpath:string;
 Lines,InputContent,OutputContent,TerminalContent:TStringList;
 bookmarks:array of longint;
 bc:longint;
 saved:boolean;
 empty:boolean;
-inputname,outputname:String;
+inputname,outputname:string;
 FileInputType:MyInputType;
 end;
 
@@ -359,19 +312,12 @@ end;
 
 procedure TMainForm.FormCreate(Sender: TObject);
 var prpath:string;
-     pr:TStringListUTF8;
-     par,val,s:string;
-     i,q:longint;
  begin
-  ForceDirectoriesUTF8(AddDefines('%t'));
-  SetCurrentDirUTF8(ExtractFilePath(ParamStrUTF8(0)));
-
   FileCount:=1;
   sel:=1;
   allfile[FileCount].name:='Untitle.pas';
   allfile[FileCount].fullpath:='';
   allfile[FileCount].Lines:=TStringList.Create;
-  allfile[FileCount].Lines.Text:=blank;
   allfile[FileCount].saved:=false;
   allfile[FileCount].empty:=true;
   allfile[FileCount].inputname:='input.txt';
@@ -379,65 +325,20 @@ var prpath:string;
   allfile[FileCount].InputContent:=TStringList.Create;
   allfile[FileCount].OutputContent:=TStringList.Create;
   allfile[FileCount].TerminalContent:=TStringList.Create;
-  MainSynEdit.Text:=blank;
-
 
 
   prpath:=ExtractFileDir(ParamStr(0));
-  CompileCommand:='bin'+slash+'fpc.exe -g -l -Cr -vwne -WC -FE"%t" "%f"';
-  BuildCommand:='bin'+slash+'fpc.exe -vwne -WC "%f"';
-  RunComand:='"%t'+slash+'%n.exe"';
-  GdbComand:='bin'+slash+'gdb.exe -q -f';
+  CompileCommand:='bin/fpc.exe -g -vwne -WC -FE"%t" "%f"';
+  RunComand:='"%t/%n.exe"';
+  GdbComand:='bin/gdb.exe -q -f';
 
   wantdebug:=false;
   wantcursor:=false;
 
- If FileExistsUTF8('setings.ini') then
- begin
- pr:=TStringListUTF8.Create;
- pr.LoadFromFile('setings.ini');
- for i:=0 to pr.Count-1 do
-     if pos('=',pr[i])<>0 then
-     begin
-     par:=copy(pr[i],1,pos('=',pr[i])-1);
-     val:=copy(pr[i],pos('=',pr[i])+1,length(pr[i])-pos('=',pr[i]));
-     {$B-}
-     while (par<>'') and (par[1]=' ') do delete(par,1,1);
-     while (par<>'') and (par[length(par)]=' ') do delete(par,length(par),1);
-     while (val<>'') and (val[1]=' ') do delete(val,1,1);
-     while (val<>'') and (val[length(val)]=' ') do delete(val,length(val),1);
-     {$B+}
-     par:=LowerCase(par);
-     If par=LowerCase('CompileCommand') then  CompileCommand:=val;
-     If par=LowerCase('BuildCommand') then  BuildCommand:=val;
-     If par=LowerCase('RunComand') then  RunComand:=val;
-     If par=LowerCase('GdbComand') then  GdbComand:=val;
-     if par=LowerCase('NAME') then youname:=val;
-     if par=LowerCase('E-MAIL') then email:=val;
-     end;
-  pr.Free;
- end;
-
-for i:=1 to Paramcount do
-begin
-     s:=ParamStrUTF8(i);
-     OpenFile(s);
-end;
-
-end;
-
-procedure TMainForm.FormDropFiles(Sender: TObject;
-  const FileNames: array of String);
-var
-   i: int32;
-begin
-     for i:=1 to length(FileNames) do
-         openfile(FileNames[i-1]);
 end;
 
 procedure TMainForm.GDBMessageTimerStopTimer(Sender: TObject);
 var w:longint;
-     rd:boolean;
 begin
     if GDBProcess.Running then  GDBProcess.Terminate(0);
     stopline:=-1;
@@ -457,25 +358,6 @@ begin
   If w>100 then begin ShowMessage('Невозможно завершить приложение'); exit end;
   end;
 
-  w:=1;
-    while (not FileIsReadable(fi)) or (not FileIsReadable(fo))  do
-  begin
-  sleep(50);
-  Application.ProcessMessages;
-  inc(w);
-  If w>100 then begin ShowMessage('Невозможно прочитать вывод'); exit end;
-  end;
-
-
-
-    w:=1;
-  rd:=false;
-  InputSynEdit.ClearAll;
-  OutputSynEdit.ClearAll;
-  repeat
-  inc(w);
-  sleep(50);
-  try
   InputSynEdit.Lines.LoadFromFile(fi);
   OutputSynEdit.Lines.LoadFromFile(fo);
   If removeIO then
@@ -483,13 +365,6 @@ begin
   DeleteFile(fi);
   DeleteFile(fo);
   end;
-  finally  rd:=true;
-  end;
-
-  until (rd) or (w>100);
-
-  if not rd then  begin ShowMessage('Невозможно прочитать вывод'); exit end;
-
 
 end;
 
@@ -498,7 +373,6 @@ begin
   If pos(LineEnding,source)=0 then
   begin
   s:=source;
-  while pos('(gdb)',s)<>0 do delete(s,pos('(gdb)',s),6);
   source:='';
   end else
   begin
@@ -517,35 +391,65 @@ begin
     begin
     delete(s,1,pos(LinuxStyleSlash(AllFile[sel].fullpath),s)+length(LinuxStyleSlash(AllFile[sel].fullpath)));
     stopline:=StrToInt(copy(s,1,pos(':',s)-1));
-    BrLineTimer.Enabled:=false;
     MainSynEdit.CaretY:=stopline;
     SetRunButtons(true,true);
     state:=wpsDebug;
-    UpdateWatch;
     MainSynEdit.Invalidate;
     end;
 end;
 
-procedure TMainForm.VerticalSplitterChangeBounds(Sender: TObject);
+procedure TMainForm.WatchValueListEditorColRowDeleted(Sender: TObject;
+  IsColumn: Boolean; sIndex, tIndex: Integer);
 begin
-      MainForm.Repaint;
+ wasEdit:=false;
+ lastx:=0;
+ lasty:=1;
+ WatchValueListEditor.Col:=0;
+ WatchValueListEditor.Row:=1;
 end;
 
+procedure TMainForm.WatchValueListEditorExit(Sender: TObject);
+begin
+  If wasEdit then ChangeWatch(lastx,lasty,lastvalue,WatchValueListEditor.Cells[lastx,lasty]);
+wasEdit:=false;
+end;
+
+procedure TMainForm.WatchValueListEditorGetEditText(Sender: TObject; ACol,
+  ARow: Integer; var Value: string);
+begin
+  If not wasEdit then
+  begin
+  lastvalue:=Value;
+  lastx:=ACol;
+  lasty:=ARow;
+  end;
+  wasedit:=true;
+end;
+
+procedure TMainForm.WatchValueListEditorSelectCell(Sender: TObject; aCol,
+  aRow: Integer; var CanSelect: Boolean);
+begin
+If wasEdit then
+begin
+ChangeWatch(lastx,lasty,lastvalue,WatchValueListEditor.Cells[lastx,lasty]);
+CanSelect:=false;
+exit;
+end;
+
+if acol=0 then WatchValueListEditor.Options:=WatchValueListEditor.Options+[goEditing] else WatchValueListEditor.Options:=WatchValueListEditor.Options-[goEditing];
+end;
 
 procedure TMainForm.GDBMessageTimerTimer(Sender: TObject);
 var s,ss,per:string;
      l:TStringList;
-     i, ii, code :longint;
+     i,code:longint;
 begin
   s:=readOutputData(GDBProcess);
-  PrintGDB(s);
 
   while s<>'' do
   begin
   ParseByLine(s,ss);
-
-
-  if ss='' then Continue;
+  PrintGDB(ss);
 
   if (pos('exited with code',ss)<>0) then
   begin
@@ -563,20 +467,18 @@ begin
 
   If pos(#26#26,ss)<>0 then breakline(copy(ss,pos(#26#26,ss),length(ss)-pos(#26#26,ss)+1)) else
 
-  If (State=wpsDebug) and (pos('====',ss)<>0) then
+  If (State=wpsDebug) and (ss[1] in ['0'..'9']) and (pos(': ',ss)<>0) and (pos(': ',ss)<pos('= ',ss)) then
   begin
-  per:=copy(ss,1,pos('====',ss)-1);
-  delete(ss,1,pos('====',ss)+3);
-  for i:=0 to 1 do
-      for ii:=0 to WatchGrid.RowCount-2 do
-          if upcase(WatchGrid.Cells[i*2,ii]) = upcase(per) then
-             WatchGrid.Cells[i*2+1,ii]:= ss;
+  delete(ss,1,pos(': ',ss)+1);
+  per:=copy(ss,1,pos(' = ',ss)-1);
+  delete(ss,1,pos(' = ',ss)+2);
+  for i:=2 to WatchValueListEditor.RowCount do
+      If UPCASE(WatchValueListEditor.Cells[0,i-1])=UPCASE(per) then WatchValueListEditor.Cells[1,i-1]:=ss;
   end else
 
   if (pos('Program received signal ',ss)<>0) then
   begin
   crash:=true;
-  UpdateWatch;
   ShowMessage('В программе возникло асинхронное событие');
   end else
 
@@ -588,16 +490,13 @@ begin
 
   end;
 
-procedure TMainForm.HorizontalSplitterChangeBounds(Sender: TObject);
-begin
-    MainForm.Repaint;
-end;
+
+
 
 procedure TMainForm.InputNameEditChange(Sender: TObject);
 begin
     If InputNameEdit.Enabled then AllFile[sel].inputname:=InputNameEdit.Text;
 end;
-
 
 
 procedure TMainForm.BotonTabControlChange(Sender: TObject);
@@ -608,69 +507,18 @@ begin
   end;
 end;
 
-procedure TMainForm.ExtendedTabToolbar1ChangeBounds(Sender: TObject);
-begin
-
-end;
-
-procedure TMainForm.ExtendedTabToolbar1ContextPopup(Sender: TObject;
-  MousePos: TPoint; var Handled: Boolean);
-begin
-
-end;
-
-procedure TMainForm.FormKeyPress(Sender: TObject; var Key: char);
-begin
-
-end;
-
-procedure TMainForm.FormShow(Sender: TObject);
-begin
-  (Sender as TForm).Left:=(Screen.Width - (Sender as TForm).Width) div 2;
-  (Sender as TForm).Top:=(Screen.Height - (Sender as TForm).Height) div 2;
-end;
-
-procedure TMainForm.MainSynEditClick(Sender: TObject);
-begin
-
-end;
-
-procedure TMainForm.MenuItemMultitestClick(Sender: TObject);
-begin
-  MultiTestForm.Show;
-end;
-
-procedure TMainForm.MenuItemRemoveClick(Sender: TObject);
-begin
-  MainSynEdit.ClearSelection;
-end;
-
-var KostilForDeleteingTab:boolean=false;
-
-procedure TMainForm.TabControl1Change(Sender: TObject);
-begin
-              If (State<>wpsEdit) and (TabControl1.TabIndex+1<>sel)  then
-  begin
-  TabControl1.TabIndex:=sel-1;
-  exit;
-  end;
-
-     if  TabControl1.TabIndex+1<=FileCount then
-      reselect(TabControl1.TabIndex+1-ord(KostilForDeleteingTab));
-
-end;
-
 procedure TMainForm.setrunbuttons(Erun,Estop:boolean);
 begin
  ToolButton11.Enabled:=erun;
  ToolButton12.Enabled:=estop;
 end;
 
-function ReadOutputData(process:TProcess):string;
+function ReadOutputData(process:TAsyncProcess):string;
+var s:string;
+     b:byte;
 begin
 readOutputData:='';
-while Process.Output.NumBytesAvailable<>0 do  readOutputData+=char(Process.Output.ReadByte);
-ReadOutputData:=SysToUTF8(ReadOutputData);
+while Process.NumBytesAvailable<>0 do readOutputData+=char(Process.Output.ReadByte);
 end;
 
 procedure TMainForm.TerminalEditKeyDown(Sender: TObject; var Key: Word;
@@ -695,21 +543,13 @@ CleanGDBOutput;
 TerminalMemo.Lines.Clear;
 crash:=false;
 
-
 If InputType=iptConsole then
 begin
 RunProcess.CommandLine:=AddDefines(RunComand);
 RunProcess.CurrentDirectory:=ExtractFileDir(Allfile[sel].fullpath);
-try
 RunProcess.Execute;
-except
-  ShowMessage('Невозможно запустить программу');
-    SetRunButtons(true,false);
-    wantdebug:=false;
 wantcursor:=false;
- exit;
-end;
-wantcursor:=false;
+wantdebug:=false;
 RunMessageTimer.Enabled:=true;
 TerminalMemo.Lines.Add('Программа запущена');
 exit;
@@ -717,35 +557,19 @@ end;
 
 GDBProcess.CommandLine:=AddDefines(GdbComand);
 GDBProcess.CurrentDirectory:=ExtractFileDir(Allfile[sel].fullpath);
-try
 GDBProcess.Execute;
-except
-  ShowMessage('Невозможно запустить GDB');
-  SetRunButtons(true,false);
-  wantdebug:=false;
-wantcursor:=false;
- exit;
-end;
 
 WriteGDB('set width 0');
-
-WriteGDB('define pv');
-WriteGDB('echo \n');
-WriteGDB('echo $arg0====');
-WriteGDB('output $arg0');
-WriteGDB('echo \n');
-WriteGDB('end');
-
 WriteGDB('file '+LinuxStyleSlash(AddDefines(RunComand)));
 
 If wantdebug then WriteGDB('b main');
-If wantcursor then WriteGDB('b "'+ExtractFileName(Allfile[sel].fullpath)+'":'+IntToStr(wantcursorpos));
+If wantcursor then WriteGDB('b '+ExtractFileName(Allfile[sel].fullpath)+':'+IntToStr(wantcursorpos));
 for i:=1 to MainSynEdit.Marks.Count do  WriteGDB('b '+ExtractFileName(Allfile[sel].fullpath)+':'+IntToStr(MainSynEdit.Marks[i-1].Line));
 
 If InputType=iptFile then
 begin
-fi:=ExtractFileDir(AllFile[sel].fullpath)+slash+InputNameEdit.Text;
-fo:=ExtractFileDir(AllFile[sel].fullpath)+slash+OutputNameEdit.Text;
+fi:=ExtractFileDir(AllFile[sel].fullpath)+'/'+InputNameEdit.Text;
+fo:=ExtractFileDir(AllFile[sel].fullpath)+'/'+OutputNameEdit.Text;
 
 removeIO:=not FileExists(fi);
 InputSynEdit.Lines.SaveToFile(fi);
@@ -756,16 +580,14 @@ end;
 
 If InputType=iptEmulate then
 begin
-fi:=ExtractFileDir(AllFile[sel].fullpath)+slash+ExtractFileNameOnly(AllFile[sel].fullpath)+'.input.tmp';
-fo:=ExtractFileDir(AllFile[sel].fullpath)+slash+ExtractFileNameOnly(AllFile[sel].fullpath)+'.output.tmp';
+fi:=ExtractFileDir(AllFile[sel].fullpath)+'\'+ExtractFileNameOnly(AllFile[sel].fullpath)+'.input.tmp';
+fo:=ExtractFileDir(AllFile[sel].fullpath)+'\'+ExtractFileNameOnly(AllFile[sel].fullpath)+'.output.tmp';
 
 removeIO:=true;
 InputSynEdit.Lines.SaveToFile(fi);
-OutputSynEdit.Lines.Clear;
 OutputSynEdit.Lines.SaveToFile(fo);
 
-
-{$IFDEF Windows}
+{WriteGDB('r <'+LinuxStyleSlash(fi)+' 1>'+LinuxStyleSlash(fo));  }
 If not wantdebug then WriteGDB('b main');
 WriteGDB('r');
 WriteGDB('p dup2(open("'+LinuxStyleSlash(fi)+'", 0), 0) ');
@@ -775,13 +597,10 @@ begin
 WriteGDB('c');
 skipBreak:=true;
 end;
-{$ELSE}
- WriteGDB('r <"'+LinuxStyleSlash(fi)+'" >"'+LinuxStyleSlash(fo)+'"');
-{$ENDIF}
 end;
 
 
-//for i:=2 to KGrid1.RowCount-1 do WriteGDB('display '+ KGrid1.Cells[0,i-1]);
+for i:=2 to WatchValueListEditor.RowCount-1 do WriteGDB('display '+ WatchValueListEditor.Cells[0,i-1]);
 
 GDBMessageTimer.Enabled:=true;
 wantcursor:=false;
@@ -813,28 +632,13 @@ begin
 CompilMessageTimer.Enabled:=false;
 State:=wpsEdit;
 If CompProcess.ExitStatus=0 then MessageSynMemo.Lines.Add('Успешно') else begin  MessageSynMemo.Lines.Add('Ошибка компиляции');   SetRunButtons(true,false); wantcursor:=false; wantdebug:=false; UnLockInterface;  end;
-If (errorLine=-1) then MessageSynMemo.CaretY:=MessageSynMemo.Lines.Count;
+MessageSynMemo.CaretY:=MessageSynMemo.Lines.Count;
 If WaitForExecute then
 begin
 WaitForExecute:=false;
 If CompProcess.ExitStatus=0 then Run  else SetRunButtons(true,false);
 end else UnLockInterface;
 end;
-end;
-
-var brst:boolean;
-procedure TMainForm.BrLineTimerStartTimer(Sender: TObject);
-begin
-brst:=false;
-end;
-
-procedure TMainForm.BrLineTimerTimer(Sender: TObject);
-begin
-  If not brst then brst:=true else
-  begin
-  stopline:=-1;
-  BrLineTimer.Enabled:=false;
-  end;
 end;
 
 function FdToSso(a:TFindOptions):TSynSearchOptions;
@@ -859,45 +663,11 @@ MainSynEdit.SearchReplace(FindDialog1.FindText,FindDialog1.FindText,FdToSso(Find
 end;
 
 procedure TMainForm.FormClose(Sender: TObject; var CloseAction: TCloseAction);
-var pr:TStringListUTF8;
-    s:string;
-    i:int32;
 begin
      If GDBProcess.Running then GDBProcess.Terminate(0);
      If CompProcess.Running then CompProcess.Terminate(0);
      If RunProcess.Running then RunProcess.Terminate(0);
   DeleteDirectory(ExtractFileDir(ParamStr(0))+'\temp',true);
-
-  pr:=TStringListUTF8.Create;
-  pr.Add('CompileCommand='+CompileCommand);
-  pr.Add('BuildCommand='+BuildCommand);
-  pr.Add('RunComand='+RunComand);
-  pr.Add('GdbComand='+GdbComand);
-  pr.Add('NAME='+youname);
-  pr.Add('E-MAIL='+email);
-
-  pr.SaveToFile('setings.ini');
-  pr.Free;
-
-  If wantUpdate then
-  begin
-
-  {$IFDEF Windows}
-  UpdateProcess.Executable:='zup.exe';
-  {$ELSE}
-  UpdateProcess.Executable:='zup';
-  {$ENDIF}
-  for i:=1 to filetoupdate.n do
-      If  pos('zup',filetoupdate.f[i].name)=0 then
-      begin
-          UpdateProcess.Parameters.Add(filetoupdate.f[i].name+'.tmp');
-          UpdateProcess.Parameters.Add(filetoupdate.f[i].name);
-      end;
-  UpdateProcess.Parameters.Add(ExtractFileName(ParamStr(0)));
-
-  UpdateProcess.Execute;
-  end;
-
 end;
 
 procedure TMainForm.MainSynEditGutterClick(Sender: TObject; X, Y,
@@ -932,8 +702,6 @@ end;
 
 procedure TMainForm.MainSynEditKeyPress(Sender: TObject; var Key: char);
 begin
-     if State <> wpsEdit then
-        MenuItemStop.Click;
   Status.Invalidate;
 end;
 
@@ -969,20 +737,11 @@ end;
 procedure TMainForm.MainSynEditStatusChange(Sender: TObject;
   Changes: TSynStatusChanges);
 begin
-
-
     if (scModified in Changes) and (MainSynEdit.Modified=true)  then
     begin
     AllFile[sel].saved:=false;
     allfile[sel].empty:=false;
     errorLine:=-1;
-    MainSynEdit.Invalidate;
-    end;
-
-    If (scCaretX in Changes) or (scCarety in Changes) then
-    begin
-         errorLine:=-1;
-         MainSynEdit.Invalidate;
     end;
 end;
 
@@ -1006,35 +765,9 @@ begin
   MainSynEdit.CopyToClipboard;
 end;
 
-procedure TMainForm.MenuItem22Click(Sender: TObject);
-begin
-  If State<>wpsEdit then exit;
-
-SaveFile(sel);
-
-if not AllFile[sel].saved then
-begin
-WaitForExecute:=false;
-SetRunButtons(true,false);
-Exit;
-end;
-
-BotonTabControl.TabIndex:=0;
-MessagePanel.BringToFront;
-LockInterface;
-
-errorLine:=-1;
-State:=wpsCompil;
-MessageSynMemo.Lines.Clear;
-MessageSynMemo.Lines.Add('Компиляция...');
-CompProcess.CommandLine:=AddDefines(BuildCommand);
-CompProcess.Execute;
-CompilMessageTimer.Enabled:=true;
-end;
-
 procedure TMainForm.MenuItem7Click(Sender: TObject);
 begin
-  CalculatorForm.Show;
+  CalculatorDialog1.Execute;
 end;
 
 procedure TMainForm.MenuItem8Click(Sender: TObject);
@@ -1103,7 +836,7 @@ procedure TMainForm.MenuItemToCursorClick(Sender: TObject);
 begin
    If State=wpsDebug then
    begin
-    BrLineTimer.Enabled:=true;
+   stopline:=-1;
    MainSynEdit.Invalidate;
    SetRunButtons(false,true);
   WriteGDB('tb '+ExtractFileName(AllFile[sel].fullpath)+':'+IntToStr(MainSynEdit.CaretY));
@@ -1126,16 +859,14 @@ begin
   For i:=1 to FileCount do CloseCarefully(i);
 end;
 
-
-
 procedure TMainForm.closefile(index:longint);
-var i,qi:longint;
+var i:longint;
 begin
 if FileCount=1 then
 begin
  allfile[1].name:='Untitle.pas';
   allfile[1].fullpath:='';
-  allfile[1].Lines.Text:=blank;
+  allfile[1].Lines.Clear;
   allfile[1].saved:=false;
   allfile[1].empty:=true;
   TabControl1.Tabs[0]:='Untitle.pas';
@@ -1150,32 +881,26 @@ begin
   exit;
 end;
 
-For i:=sel to FileCount-1 do
-    swap(allfile[i],AllFile[i+1]);
-
-
-qi:=index;
-
+For i:=sel to FileCount-1 do swap(allfile[i],AllFile[i+1]);
 AllFile[FileCount].Lines.Free;
 AllFile[FileCount].InputContent.Free;
 AllFile[FileCount].OutputContent.Free;
 AllFile[FileCount].TerminalContent.Free;
-sel:=FileCount;
 dec(FileCount);
 
  If index>FileCount then  index:=FileCount;
 MainSynEdit.Lines.Clear;
 For i:=1 to AllFile[index].Lines.Count do MainSynEdit.Lines.Add(AllFile[index].Lines[i-1]);
 
-KostilForDeleteingTab:=true;
-TabControl1.Tabs.Delete(qi-1);
+
+TabControl1.Tabs.Delete(index-1);
 end;
 
 
 procedure TMainForm.closecarefully(index:smallint);
 begin
 
-if (not AllFile[index].saved) and (not AllFile[index].empty) then
+if not AllFile[index].saved then
 Case MessageDlg('Файл '+AllFile[index].name+' не сохранён. Сохранить?',mtConfirmation,mbYesNoCancel,0) of
 mrYes:begin SaveFile(index); if  AllFile[index].saved then Closefile(index); end;
 mrNo:Closefile(index);
@@ -1197,7 +922,6 @@ procedure TMainForm.MenuItemCompilClick(Sender: TObject);
 begin
 If State<>wpsEdit then exit;
 
-
 SaveFile(sel);
 
 if not AllFile[sel].saved then
@@ -1216,14 +940,7 @@ State:=wpsCompil;
 MessageSynMemo.Lines.Clear;
 MessageSynMemo.Lines.Add('Компиляция...');
 CompProcess.CommandLine:=AddDefines(CompileCommand);
-try
 CompProcess.Execute;
-except
- MessageSynMemo.Lines.Add('Невозможно запустить компилятор');
- State:=wpsEdit;
- UnLockInterface;
- exit;
-end;
 CompilMessageTimer.Enabled:=true;
 end;
 
@@ -1240,14 +957,14 @@ begin
  SetLength(allfile[index].bookmarks,allfile[index].bc+1);
  for i:=1 to allfile[index].bc do allfile[index].bookmarks[i]:=MainSynEdit.Marks[i-1].Line;
 
- AllFile[index].inputname:=InputNameEdit.Text;
- AllFile[index].outputname:=OutputNameEdit.Text;
+{ AllFile[index].inputname:=InputNameEdit.Text;
+ AllFile[index].outputname:=OutputNameEdit.Text; }
 
  AllFile[index].InputContent.Clear;
  For i:=1 to InputSynEdit.Lines.Count do AllFile[index].InputContent.Add( InputSynEdit.Lines[i-1]);
 
  AllFile[index].OutputContent.Clear;
- For i:=1 to OutputSynEdit.Lines.Count do AllFile[index].OutputContent.Add(OutputSynEdit.Lines[i-1]);
+ For i:=1 to OutputSynEdit.Lines.Count do AllFile[index].InputContent.Add(OutputSynEdit.Lines[i-1]);
 
   AllFile[index].TerminalContent.Clear;
  For i:=1 to TerminalMemo.Lines.Count do AllFile[index].TerminalContent.Add(TerminalMemo.Lines[i-1]);
@@ -1300,7 +1017,6 @@ if State<>wpsEdit then exit;
   allfile[FileCount].name:='Untitle.pas';
   allfile[FileCount].fullpath:='';
   allfile[FileCount].Lines:=TStringList.Create;
-  allfile[FileCount].Lines.Text:=blank;
   allfile[FileCount].saved:=false;
   allfile[FileCount].empty:=true;
   allfile[FileCount].bc:=0;
@@ -1336,50 +1052,33 @@ If State<>wpsEdit then exit;
 end;
 
 Procedure TMainForm.WriteGDB(s:string);
-var
-   i:LongInt;
 begin
 If (State=wpsDebug) or (State=wpsRun) then
 begin
 PrintGDB(s);
 s:=s+LineEnding;
-s:=UTF8ToSys(s);
-for i:=1 to Length(s) do
-    GDBProcess.Input.WriteByte(byte(s[i]));
+GDBProcess.Input.WriteBuffer(s[1],length(s));
 end;
 end;
 
-
-procedure loadtxt(source:string);
-var t:TextFile;
-     s:string;
-begin
-assign(t,(source));
-reset(t);
-read(t,s);
-close(t);
-end;
-
-procedure TMainForm.openfile(const filename:string);
+procedure TMainForm.MenuItemOpenClick(Sender: TObject);
 var q:longint;
 begin
-If not allfile[sel].empty then
-begin
-Inc(FileCount);
-q:=FileCount;
-TabControl1.Tabs.Add(ExtractFileName(FileName))
-end else
-begin
-q:=sel;
-TabControl1.Tabs[q-1]:=ExtractFileName(FileName);
-end;
+if State<>wpsEdit then exit;
+
+If not OpenDialog1.Execute then exit;
+
+ If not allfile[sel].empty then
+ begin
+ Inc(FileCount);
+ q:=FileCount;
+ end else q:=sel;
 
  with allfile[q] do
  begin
- fullpath:=(FileName);
- name:=ExtractFileName(FileName);
+ fullpath:=OpenDialog1.FileName;
+ name:=ExtractFileName(OpenDialog1.FileName);
  Lines:=TStringList.Create;
- empty:=false;
  bc:=0;
  FileInputType:=iptFile;
  inputname:='input.txt';
@@ -1387,27 +1086,14 @@ end;
  InputContent:=TStringList.Create;
  OutputContent:=TStringList.Create;
  TerminalContent:=TStringList.Create;
-
- LoadStringsFromFileUTF8(Lines,FileName);
-
+ Lines.LoadFromFile(OpenDialog1.FileName);
  saved:=true;
  end;
 
+If not allfile[sel].empty then TabControl1.Tabs.Add(allfile[sel].name) else  TabControl1.Tabs[sel-1]:=allfile[sel].name;
 
-
+allfile[q].empty:=false;
 if sel=q then reloadfrom(q) else Reselect(q);
-end;
-
-
-
-procedure TMainForm.MenuItemOpenClick(Sender: TObject);
-begin
-
-if State<>wpsEdit then exit;
-
-If not OpenDialog1.Execute then exit;
-
-openfile(OpenDialog1.FileName)
 
 end;
 
@@ -1431,7 +1117,7 @@ procedure TMainForm.MenuItemRunClick(Sender: TObject);
 begin
 If State=wpsDebug then
 begin
-BrLineTimer.Enabled:=true;
+stopline:=-1;
 MainSynEdit.Invalidate;
 WriteGDB('c');
 state:=wpsRun;
@@ -1457,8 +1143,8 @@ with allfile[index] do
  name:=ExtractFileName(fullpath);
  MainForm.TabControl1.Tabs[index-1]:=name;
  ReloadTo(index);
- If index=sel then MainSynEdit.Lines.SaveToFile(allfile[index].fullpath) else SaveStringsToFileUTF8(allfile[index].Lines,allfile[index].fullpath);
- If index=sel then MainSynEdit.Modified:=false;
+ MainSynEdit.Lines.SaveToFile(allfile[index].fullpath);
+ MainSynEdit.Modified:=false;
  allfile[index].saved:=true;
  end;
 end;
@@ -1469,9 +1155,9 @@ begin
   If AllFile[index].fullpath<>'' then
   begin
   ReloadTo(index);
-  If index=sel then MainSynEdit.Lines.SaveToFile(allfile[index].fullpath) else SaveStringsToFileUTF8(allfile[index].Lines,allfile[index].fullpath);
+  MainSynEdit.Lines.SaveToFile(allfile[index].fullpath);
   allfile[index].saved:=true;
-  If index=sel then MainSynEdit.Modified:=false;
+  MainSynEdit.Modified:=false;
   end else SaveFileAs(index);
 end;
 
@@ -1495,7 +1181,7 @@ procedure TMainForm.MenuItemStepClick(Sender: TObject);
 begin
   If State=wpsDebug then
   begin
-    BrLineTimer.Enabled:=true;
+    stopline:=-1;
     MainSynEdit.Invalidate;
     SetRunButtons(false,true);
   WriteGDB('s');
@@ -1514,7 +1200,7 @@ procedure TMainForm.MenuItemStepOverClick(Sender: TObject);
 begin
     If State=wpsDebug then
     begin
-    BrLineTimer.Enabled:=true;
+        stopline:=-1;
         MainSynEdit.Invalidate;
         SetRunButtons(false,true);
     WriteGDB('n');
@@ -1552,7 +1238,9 @@ procedure TMainForm.MenuItemVrClick(Sender: TObject);
 var q:string;
 begin
   MainSynEdit.CopyToClipboard;
-  MainSynEdit.ClearSelection;
+  q:=MainSynEdit.Text;
+  Delete(q,MainSynEdit.SelStart,MainSynEdit.SelEnd-MainSynEdit.SelStart);
+  MainSynEdit.Text:=q;
 end;
 
 procedure TMainForm.MenuItemWathClick(Sender: TObject);
@@ -1631,145 +1319,83 @@ begin
   If not RunProcess.Running then RunMessageTimer.Enabled:=false;
 end;
 
-procedure TMainForm.Splitter1ChangeBounds(Sender: TObject);
-begin
-      MainForm.Repaint;
-end;
-
 procedure TMainForm.StatusTimerTimer(Sender: TObject);
 begin
   Status.Invalidate;
 end;
 
-procedure TMainForm.TabControl1ChangeBounds(Sender: TObject);
-begin
-
-end;
-
-procedure TMainForm.TabControl1Changing(Sender: TObject;
-  var AllowChange: Boolean);
-begin
-
-end;
-
-
-
-
-
-
-procedure TMainForm.UpdateWatch;
-var
-   i,ii:int32;
-   s:string;
-begin
-     for ii:=0 to 1 do
-         for i:=1 to WatchGrid.RowCount-2 do
-          begin
-               s:=WatchGrid.Cells[ii*2,i];
-               CorrectWatch(s);
-               WatchGrid.Cells[ii*2,i]:=s;
-               WriteGDB('pv '+s);
-          end;
-end;
-
-procedure TMainForm.WatchGridEditingDone(Sender: TObject);
-var
-   i: int32;
-begin
-     i:=0;
-     while i<WatchGrid.RowCount-1 do
-          If (WatchGrid.Cells[0,i]='') and (WatchGrid.Cells[2,i]='') and (WatchGrid.Cells[4,i]='')  then
-             WatchGrid.DeleteRow(I) else inc(i);
-
-     If (WatchGrid.Cells[0,i]<>'') or (WatchGrid.Cells[2,i]<>'') or (WatchGrid.Cells[4,i]<>'')  then
-        WatchGrid.RowCount:=WatchGrid.RowCount+1;
-
-     UpdateWatch;
-end;
-
-procedure TMainForm.WatchGridSelectCell(Sender: TObject; aCol, aRow: Integer;
-  var CanSelect: Boolean);
-begin
-  if aCol mod 2=0 then WatchGrid.Options:=WatchGrid.Options+[goEditing] else WatchGrid.Options:=WatchGrid.Options-[goEditing];
-end;
-
 procedure TMainForm.reselect(new:SmallInt);
 begin
-KostilForDeleteingTab:=false;
-
-If sel<=FileCount then ReloadTo(sel);
+ ReloadTo(sel);
  sel:=new;
  reloadFrom(sel);
 
-If MainForm.TabControl1.TabIndex<>sel-1 then MainForm.TabControl1.TabIndex:=sel-1;
+ MainForm.TabControl1.TabIndex:=sel-1;
+end;
+
+procedure TMainForm.TabControl1Change(Sender: TObject);
+begin
+  If (State<>wpsEdit) and (TabControl1.TabIndex+1<>sel)  then
+  begin
+  TabControl1.TabIndex:=sel-1;
+  exit;
+  end;
+
+     if  TabControl1.TabIndex+1<=FileCount then
+   if sel<>TabControl1.TabIndex+1 then reselect(TabControl1.TabIndex+1);
 
 end;
 
-
-function AddDefines(s:String):String;
+function AddDefines(s:string):string;
 var q:longint;
 begin
-while UTF8pos('%f',s)<>0 do
+while pos('%f',s)<>0 do
 begin
-q:=UTF8pos('%f',s);
-UTF8Delete(s,q,2);
-UTF8Insert(AllFile[sel].fullpath,s,q);
+q:=pos('%f',s);
+delete(s,q,2);
+Insert(AllFile[sel].fullpath,s,q);
 end;
 
-while UTF8pos('%d',s)<>0 do
+while pos('%t',s)<>0 do
 begin
-q:=UTF8pos('%f',s);
-UTF8Delete(s,q,2);
-UTF8Insert(ExtractFileDir(AllFile[sel].fullpath),s,q);
+q:=pos('%t',s);
+delete(s,q,2);
+Insert(ExtractFileDir(ParamStr(0))+'/temp',s,q);
 end;
 
-while UTF8pos('%t',s)<>0 do
+while pos('%n',s)<>0 do
 begin
-q:=UTF8pos('%t',s);
-UTF8delete(s,q,2);
-UTF8Insert(SysToUTF8(GetCurrentDir)+slash+'temp',s,q);
+q:=pos('%n',s);
+delete(s,q,2);
+Insert(ExtractFileNameOnly(AllFile[sel].fullpath),s,q);
 end;
 
-while UTF8pos('%z',s)<>0 do
+while pos('$FILENAME',s)<>0 do
 begin
-q:=UTF8pos('%z',s);
-UTF8delete(s,q,2);
-UTF8Insert(SysToUTF8(GetCurrentDir),s,q);
+q:=pos('$FILENAME',s);
+delete(s,q,length('$FILENAME'));
+insert(AllFile[sel].name,s,q);
 end;
 
-while UTF8pos('%n',s)<>0 do
+while pos('$NAME',s)<>0 do
 begin
-q:=UTF8pos('%n',s);
-UTF8delete(s,q,2);
-UTF8Insert(ExtractFileNameOnly(AllFile[sel].fullpath),s,q);
+q:=pos('$NAME',s);
+delete(s,q,length('$NAME'));
+insert(youname,s,q);
 end;
 
-while UTF8pos('$FILENAME',s)<>0 do
+while pos('$EMAIL',s)<>0 do
 begin
-q:=UTF8pos('$FILENAME',s);
-UTF8delete(s,q,UTF8length('$FILENAME'));
-UTF8insert(AllFile[sel].name,s,q);
+q:=pos('$EMAIL',s);
+delete(s,q,length('$EMAIL'));
+insert(email,s,q);
 end;
 
-while UTF8pos('$NAME',s)<>0 do
+while pos('$YEAR',s)<>0 do
 begin
-q:=UTF8pos('$NAME',s);
-UTF8delete(s,q,UTF8length('$NAME'));
-UTF8insert(youname,s,q);
-end;
-
-while UTF8pos('$EMAIL',s)<>0 do
-begin
-q:=UTF8pos('$EMAIL',s);
-UTF8delete(s,q,UTF8length('$EMAIL'));
-UTF8insert(email,s,q);
-end;
-
-while UTF8pos('$YEAR',s)<>0 do
-begin
-q:=UTF8pos('$YEAR',s);
-UTF8delete(s,q,UTF8length('$YEAR'));
-UTF8insert(inttostr(YearOf(now)),s,q);
+q:=pos('$YEAR',s);
+delete(s,q,length('$YEAR'));
+insert(inttostr(YearOf(now)),s,q);
 end;
 
 AddDefines:=s;
@@ -1800,7 +1426,7 @@ procedure TMainForm.CorrectWatch(var s:string);
 var i:longint;
 begin
 If s='' then exit;
-{i:=1;
+i:=1;
 while i<=length(s) do
 begin
 If (s[i] in ['*','/','+','-']) and ((i>1) and (s[i-1]<>' ')) then begin Insert(' ',s,i); inc(i) end;
@@ -1811,10 +1437,41 @@ end;
 while s[1]=' ' do delete(s,1,1);
 while s[length(s)]=' ' do delete(s,length(s),1);
 
-while pos('  ',s)<>0 do delete(s,pos('  ',s),1) }
-while pos(' ',s)<>0 do delete(s,pos(' ',s),1)
+while pos('  ',s)<>0 do delete(s,pos('  ',s),1)
 end;
 
+procedure TMainForm.ChangeWatch(ACol,ARow:integer;OldValue,NewValue:string);
+var s:string;
+begin
+if OldValue=NewValue then exit;
+s:=NewValue;
+CorrectWatch(NewValue);
+if s<>NewValue then
+begin
+WatchValueListEditor.Cells[ACol,ARow]:=NewValue;
+exit;
+end;
+lastvalue:=NewValue;
+wasEdit:=false;
+
+  If (NewValue<>'') and (ARow=WatchValueListEditor.RowCount-1) then
+    begin
+    WatchValueListEditor.RowCount:=WatchValueListEditor.RowCount+1;
+    If (State=wpsRun) or (State=wpsDebug) then WriteGDB('display '+NewValue);
+    end else
+
+ If (NewValue='') and (ARow<>WatchValueListEditor.RowCount-1) then
+ begin
+ WatchValueListEditor.DeleteRow(aRow);
+// If (State=wpsRun) or (State=wpsDebug) then WriteGDB('delete display '+OldValue);
+ end else
+
+ If (State=wpsRun) or (State=wpsDebug) then
+ begin
+// WriteGDB('delete display '+OldValue);
+ WriteGDB('display '+NewValue);
+ end;
+end;
 
 
 Procedure TMainForm.LockInterface;

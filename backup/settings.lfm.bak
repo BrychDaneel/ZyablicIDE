@@ -1,0 +1,25 @@
+object SettingForm: TSettingForm
+  Left = 551
+  Height = 306
+  Top = 261
+  Width = 312
+  Caption = 'SettingForm'
+  ClientHeight = 306
+  ClientWidth = 312
+  LCLVersion = '1.2.6.0'
+  object Button1: TButton
+    Left = 104
+    Height = 25
+    Top = 46
+    Width = 75
+    Caption = 'Шрифт'
+    OnClick = Button1Click
+    TabOrder = 0
+  end
+  object FontDialog1: TFontDialog
+    MinFontSize = 0
+    MaxFontSize = 0
+    left = 35
+    top = 51
+  end
+end

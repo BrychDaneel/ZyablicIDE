@@ -7,6 +7,7 @@ object SettingForm: TSettingForm
   ClientHeight = 341
   ClientWidth = 305
   OnCreate = FormCreate
+  OnShow = FormShow
   LCLVersion = '1.3'
   object GroupBox1: TGroupBox
     Left = 0
@@ -98,6 +99,7 @@ object SettingForm: TSettingForm
       EditLabel.ParentColor = False
       LabelPosition = lpLeft
       TabOrder = 3
+      OnChange = Edit4Change
     end
   end
   object GroupBox2: TGroupBox
@@ -142,6 +144,7 @@ object SettingForm: TSettingForm
       EditLabel.ParentColor = False
       LabelPosition = lpLeft
       TabOrder = 1
+      OnChange = Edit5Change
     end
     object Edit6: TLabeledEdit
       Left = 57
@@ -161,6 +164,7 @@ object SettingForm: TSettingForm
       EditLabel.ParentColor = False
       LabelPosition = lpLeft
       TabOrder = 2
+      OnChange = Edit6Change
     end
   end
   object GroupBox3: TGroupBox
