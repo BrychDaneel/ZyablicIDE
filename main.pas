@@ -790,6 +790,7 @@ end;
 
 procedure TMainForm.CompilMessageTimerTimer(Sender: TObject);
 var s,ss:string;
+    code: int32;
 begin
     s:=ReadOutputData(CompProcess);
 while s<>'' do
@@ -801,11 +802,16 @@ MessageSynMemo.Lines.Add(ss);
 If errorLine=-1 then MessageSynMemo.CaretY:=MessageSynMemo.Lines.Count;
 end;
 If ((errorLine=-1) and ((pos('Error:',ss)<>0) or (pos('Fatal:',ss)<>0))) and (copy(ss,1,pos('(',ss)-1)=ExtractFileName(AllFile[sel].fullpath)) then
-   begin
-   errorLine:=strtoint(copy(ss,pos('(',ss)+1,pos(',',ss)-pos('(',ss)-1));
-   MainSynEdit.CaretY:=errorLine;
-   MainSynEdit.Invalidate;
-   end;
+begin
+      val(copy(ss,pos('(',ss)+1,pos(',',ss)-pos('(',ss)-1), errorLine, code);
+      If code=0 then
+      begin
+          MainSynEdit.CaretY:=errorLine;
+          MainSynEdit.Invalidate;
+      end
+      else
+          errorLine:=-1;
+end;
 end;
 
 if not CompProcess.Running then
@@ -820,6 +826,7 @@ WaitForExecute:=false;
 If CompProcess.ExitStatus=0 then Run  else SetRunButtons(true,false);
 end else UnLockInterface;
 end;
+
 end;
 
 var brst:boolean;
@@ -979,7 +986,7 @@ begin
     MainSynEdit.Invalidate;
     end;
 
-    If (scCaretX in Changes) or (scCarety in Changes) then
+    If ((scCaretX in Changes) or (scCarety in Changes)) and (State <> wpsCompil) then
     begin
          errorLine:=-1;
          MainSynEdit.Invalidate;
