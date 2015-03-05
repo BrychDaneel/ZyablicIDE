@@ -6,7 +6,7 @@
 
 ; Define helper variables
 !define PRODUCT_NAME "ZyablicIDE"
-!define PRODUCT_VERSION "0.1.0.16"
+!define PRODUCT_VERSION "0.1.1.18"
 !define PRODUCT_DISPLAY_NAME "${PRODUCT_NAME} v${PRODUCT_VERSION}"
 !define PRODUCT_PUBLISHER "Brychikov Daneel"
 !define PRODUCT_WEB_SITE ""
@@ -87,9 +87,9 @@ Caption "${PRODUCT_DISPLAY_NAME} Setup"
 UninstallCaption "${PRODUCT_DISPLAY_NAME} Uninstall"
 
 ; Installer file metadata
-VIProductVersion "0.1.0.16"
+VIProductVersion "0.1.1.18"
 VIAddVersionKey /LANG=${LANG_ENGLISH} "ProductName" "ZyablicIDE"
-VIAddVersionKey /LANG=${LANG_ENGLISH} "ProductVersion" "0.1.0.16"
+VIAddVersionKey /LANG=${LANG_ENGLISH} "ProductVersion" "0.1.1.18"
 VIAddVersionKey /LANG=${LANG_ENGLISH} "CompanyName" "Brychikov Daneel"
 VIAddVersionKey /LANG=${LANG_ENGLISH} "LegalCopyright" "? ${PRODUCT_PUBLISHER}"
 VIAddVersionKey /LANG=${LANG_ENGLISH} "LegalTrademarks" ""

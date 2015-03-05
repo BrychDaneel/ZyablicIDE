@@ -2,7 +2,7 @@
 <CONFIG>
   <ProjectSession>
     <Version Value="9"/>
-    <BuildModes Active="Default"/>
+    <BuildModes Active="Linux32"/>
     <Units Count="44">
       <Unit0>
         <Filename Value="ZyablicIDE.lpr"/>
@@ -22,7 +22,7 @@
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
         <TopLine Value="777"/>
-        <CursorPos X="43" Y="796"/>
+        <CursorPos X="100" Y="796"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
