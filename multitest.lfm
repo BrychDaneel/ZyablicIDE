@@ -1,29 +1,29 @@
 object MultiTestForm: TMultiTestForm
   Left = 370
-  Height = 97
+  Height = 117
   Top = 163
-  Width = 509
+  Width = 561
   AutoSize = True
   Caption = 'MultiTestForm'
-  ClientHeight = 97
-  ClientWidth = 509
+  ClientHeight = 117
+  ClientWidth = 561
   OnShow = FormShow
   LCLVersion = '1.3'
   object Panel4: TPanel
     Left = 0
     Height = 50
-    Top = 43
-    Width = 509
+    Top = 67
+    Width = 561
     Align = alTop
     Caption = 'Panel4'
     ClientHeight = 50
-    ClientWidth = 509
+    ClientWidth = 561
     TabOrder = 0
     object Button3: TButton
-      Left = 443
+      Left = 482
       Height = 48
       Top = 1
-      Width = 65
+      Width = 78
       Align = alClient
       Caption = 'Запуск'
       OnClick = Button3Click
@@ -33,67 +33,67 @@ object MultiTestForm: TMultiTestForm
       Left = 1
       Height = 48
       Top = 1
-      Width = 442
+      Width = 481
       Align = alLeft
       AutoSize = True
       ClientHeight = 48
-      ClientWidth = 442
+      ClientWidth = 481
       TabOrder = 1
       object CheckBox1: TCheckBox
         Left = 2
-        Height = 19
+        Height = 26
         Top = 1
-        Width = 210
+        Width = 246
         Caption = 'Учитывать пробелы в конце строк'
         TabOrder = 0
       end
       object RadioButton1: TRadioButton
         Left = 1
-        Height = 19
+        Height = 26
         Top = 24
-        Width = 128
+        Width = 155
         Caption = 'Клавиатурный ввод'
         Checked = True
         TabOrder = 2
         TabStop = True
       end
       object RadioButton2: TRadioButton
-        Left = 145
-        Height = 19
+        Left = 160
+        Height = 26
         Top = 24
-        Width = 99
+        Width = 119
         Caption = 'Ввод из фалов'
         OnChange = RadioButton2Change
         TabOrder = 1
       end
       object Label1: TLabel
-        Left = 257
+        Left = 288
         Height = 15
-        Top = 5
-        Width = 71
+        Top = 8
+        Width = 82
         Caption = 'Входной фал'
         ParentColor = False
       end
       object Edit3: TEdit
-        Left = 345
-        Height = 23
-        Top = 1
+        Left = 384
+        Height = 21
+        Top = 2
         Width = 96
         Enabled = False
         TabOrder = 3
         Text = 'input.txt'
       end
       object Label2: TLabel
-        Left = 257
+        Left = 288
         Height = 15
         Top = 28
-        Width = 80
+        Width = 92
         Caption = 'Выходной фал'
         ParentColor = False
       end
       object Edit4: TEdit
-        Left = 345
-        Height = 23
+        Left = 384
+        Height = 21
         Top = 24
         Width = 96
         Enabled = False
@@ -104,20 +104,20 @@ object MultiTestForm: TMultiTestForm
   end
   object GroupBox1: TGroupBox
     Left = 0
-    Height = 43
+    Height = 67
     Top = 0
-    Width = 509
+    Width = 561
     Align = alTop
     AutoSize = True
     Caption = 'Программа'
-    ClientHeight = 23
-    ClientWidth = 505
+    ClientHeight = 36
+    ClientWidth = 557
     TabOrder = 1
     object FileNameEdit1: TFileNameEdit
       Left = 0
-      Height = 23
+      Height = 36
       Top = 0
-      Width = 401
+      Width = 441
       FileName = '%t/%n.exe'
       FilterIndex = 0
       HideDirectories = False
@@ -129,8 +129,8 @@ object MultiTestForm: TMultiTestForm
       Text = '%t/%n.exe'
     end
     object SpinEdit1: TSpinEdit
-      Left = 455
-      Height = 23
+      Left = 507
+      Height = 36
       Top = 0
       Width = 50
       Align = alRight
@@ -140,21 +140,21 @@ object MultiTestForm: TMultiTestForm
       TabOrder = 1
     end
     object Label3: TLabel
-      Left = 401
-      Height = 23
+      Left = 441
+      Height = 36
       Top = 0
-      Width = 54
+      Width = 66
       Align = alRight
-      Caption = '     Тэсты: '
+      Caption = '     Тесты: '
       Layout = tlCenter
       ParentColor = False
     end
   end
   object ScrollBox1: TScrollBox
     Left = 0
-    Height = 4
-    Top = 93
-    Width = 509
+    Height = 1
+    Top = 117
+    Width = 561
     HorzScrollBar.Page = 1
     VertScrollBar.Page = 1
     Align = alClient

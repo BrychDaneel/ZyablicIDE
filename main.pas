@@ -384,11 +384,18 @@ var prpath:string;
 
 
   prpath:=ExtractFileDir(ParamStr(0));
+
+  {$IFDEF WINDWOS}
   CompileCommand:='bin'+slash+'fpc.exe -g -l -Cr -vwne -WC -FE"%t" "%f"';
   BuildCommand:='bin'+slash+'fpc.exe -vwne -WC "%f"';
   RunComand:='"%t'+slash+'%n.exe"';
   GdbComand:='bin'+slash+'gdb.exe -q -f';
-
+  {$ELSE}
+  CompileCommand:='bin'+slash+'fpc -g -l -Cr -vwne -FE%t "%f"';
+  BuildCommand:='bin'+slash+'fpc -vwne "%f"';
+  RunComand:='"%t'+slash+'%n"';
+  GdbComand:='gdb -q -f';
+  {$ENDIF}
   wantdebug:=false;
   wantcursor:=false;
 
@@ -1247,8 +1254,8 @@ begin
  SetLength(allfile[index].bookmarks,allfile[index].bc+1);
  for i:=1 to allfile[index].bc do allfile[index].bookmarks[i]:=MainSynEdit.Marks[i-1].Line;
 
- AllFile[index].inputname:=InputNameEdit.Text;
- AllFile[index].outputname:=OutputNameEdit.Text;
+ // AllFile[index].inputname:=InputNameEdit.Text;
+ //AllFile[index].outputname:=OutputNameEdit.Text;
 
  AllFile[index].InputContent.Clear;
  For i:=1 to InputSynEdit.Lines.Count do AllFile[index].InputContent.Add( InputSynEdit.Lines[i-1]);
@@ -1734,7 +1741,7 @@ while UTF8pos('%t',s)<>0 do
 begin
 q:=UTF8pos('%t',s);
 UTF8delete(s,q,2);
-UTF8Insert(SysToUTF8(GetCurrentDir)+slash+'temp',s,q);
+UTF8Insert(SysToUTF8(GetCurrentDir)+slash+'temp'+slash,s,q);
 end;
 
 while UTF8pos('%z',s)<>0 do

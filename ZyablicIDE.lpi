@@ -17,7 +17,7 @@
       <AutoIncrementBuild Value="True"/>
       <MinorVersionNr Value="1"/>
       <RevisionNr Value="1"/>
-      <BuildNr Value="19"/>
+      <BuildNr Value="22"/>
       <Language Value="0419"/>
       <StringTable ProductVersion="ZyablicIDE"/>
     </VersionInfo>
@@ -95,9 +95,9 @@
           </Linking>
           <Other>
             <ExecuteBefore>
-              <Command Value="$(CompPath)  -FEbin/$(TargetCPU)-$(TargetOS)-$(LCLWidgetType)/ -FUzup/lib/$(TargetCPU)-$(TargetOS) zup/zup.lpr"/>
+              <Command Value="$(CompPath)  -FEbin/$(TargetCPU)-$(TargetOS)-$(LCLWidgetType)/ -FUlib/$(TargetCPU)-$(TargetOS) zup/zup.lpr"/>
               <ScanForFPCMsgs Value="True"/>
-              <CompileReasons Compile="False" Build="False" Run="False"/>
+              <CompileReasons Run="False"/>
             </ExecuteBefore>
           </Other>
         </CompilerOptions>
