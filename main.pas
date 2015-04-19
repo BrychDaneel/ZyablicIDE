@@ -165,9 +165,15 @@ type
       MousePos: TPoint; var Handled: Boolean);
     procedure FormKeyPress(Sender: TObject; var Key: char);
     procedure FormShow(Sender: TObject);
+    procedure InputSynEditPaint(Sender: TObject; ACanvas: TCanvas);
+    procedure InputSynEditStatusChange(Sender: TObject;
+      Changes: TSynStatusChanges);
     procedure MainSynEditClick(Sender: TObject);
     procedure MenuItemMultitestClick(Sender: TObject);
     procedure MenuItemRemoveClick(Sender: TObject);
+    procedure OutputSynEditPaint(Sender: TObject; ACanvas: TCanvas);
+    procedure OutputSynEditStatusChange(Sender: TObject;
+      Changes: TSynStatusChanges);
     procedure TabControl1Change(Sender: TObject);
     procedure FindDialog1Find(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -201,7 +207,7 @@ type
     procedure MenuItemInputFileClick(Sender: TObject);
     procedure MenuItemGDBLineClick(Sender: TObject);
     procedure MenuItemToCursorClick(Sender: TObject);
-    procedure MenuItemCloseAllClick(Sender: TObject);
+    Function MenuItemCloseAllClick(Sender: TObject):boolean;
     procedure MenuItemCloseClick(Sender: TObject);
     procedure MenuItemCompilClick(Sender: TObject);
     procedure MenuItemCreateClick(Sender: TObject);
@@ -243,7 +249,7 @@ type
     procedure Closefile(index:longint);
     procedure ReloadFrom(index:longint);
     procedure ReloadTo(index:longint);
-    procedure CloseCarefully(index:smallint);
+    function CloseCarefully(index:smallint):boolean;
     procedure TerminalEditKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure UpdateState;
@@ -637,10 +643,20 @@ begin
   (Sender as TForm).Top:=(Screen.Height - (Sender as TForm).Height) div 2;
 end;
 
+procedure TMainForm.InputSynEditPaint(Sender: TObject; ACanvas: TCanvas);
+begin
+  UpdateState;
+end;
+
+procedure TMainForm.InputSynEditStatusChange(Sender: TObject;
+  Changes: TSynStatusChanges);
+begin
+  UpdateState;
+end;
+
 procedure TMainForm.MainSynEditClick(Sender: TObject);
 begin
-
-end;
+  end;
 
 procedure TMainForm.MenuItemMultitestClick(Sender: TObject);
 begin
@@ -652,18 +668,29 @@ begin
   MainSynEdit.ClearSelection;
 end;
 
-var KostilForDeleteingTab:boolean=false;
+procedure TMainForm.OutputSynEditPaint(Sender: TObject; ACanvas: TCanvas);
+begin
+  UpdateState;
+end;
+
+procedure TMainForm.OutputSynEditStatusChange(Sender: TObject;
+  Changes: TSynStatusChanges);
+begin
+  UpdateState;
+end;
+
 
 procedure TMainForm.TabControl1Change(Sender: TObject);
 begin
-              If (State<>wpsEdit) and (TabControl1.TabIndex+1<>sel)  then
+
+  If (State<>wpsEdit) and (TabControl1.TabIndex+1<>sel)  then
   begin
   TabControl1.TabIndex:=sel-1;
   exit;
   end;
 
      if  TabControl1.TabIndex+1<=FileCount then
-      reselect(TabControl1.TabIndex+1-ord(KostilForDeleteingTab));
+      reselect(TabControl1.TabIndex+1);
 
 end;
 
@@ -880,6 +907,13 @@ begin
      If GDBProcess.Running then GDBProcess.Terminate(0);
      If CompProcess.Running then CompProcess.Terminate(0);
      If RunProcess.Running then RunProcess.Terminate(0);
+
+  If not MenuItemCloseAllClick(MainForm) then
+  begin
+       CloseAction:=caNone;
+       exit;
+  end;
+
   DeleteDirectory(ExtractFileDir(ParamStr(0))+'\temp',true);
 
   pr:=TStringListUTF8.Create;
@@ -1133,11 +1167,18 @@ begin
   end;
 end;
 
-procedure TMainForm.MenuItemCloseAllClick(Sender: TObject);
+Function TMainForm.MenuItemCloseAllClick(Sender: TObject):boolean;
 var i:longint;
 begin
+   MenuItemCloseAllClick:=true;
    if State<>wpsEdit then exit;
-  For i:=1 to FileCount do CloseCarefully(i);
+  For i:=FileCount downto 1 do
+   If not CloseCarefully(i) then
+   begin
+
+        MenuItemCloseAllClick:=false;
+        break;
+   end;
 end;
 
 
@@ -1164,35 +1205,38 @@ begin
   exit;
 end;
 
-For i:=sel to FileCount-1 do
+For i:=index to FileCount-1 do
     swap(allfile[i],AllFile[i+1]);
 
-
-qi:=index;
 
 AllFile[FileCount].Lines.Free;
 AllFile[FileCount].InputContent.Free;
 AllFile[FileCount].OutputContent.Free;
 AllFile[FileCount].TerminalContent.Free;
-sel:=FileCount;
+
+qi:=index;
 dec(FileCount);
+If index>FileCount then  index:=FileCount;
 
- If index>FileCount then  index:=FileCount;
-MainSynEdit.Lines.Clear;
-For i:=1 to AllFile[index].Lines.Count do MainSynEdit.Lines.Add(AllFile[index].Lines[i-1]);
 
-KostilForDeleteingTab:=true;
+//MainSynEdit.Lines.Clear;
+//For i:=1 to AllFile[index].Lines.Count do MainSynEdit.Lines.Add(AllFile[index].Lines[i-1]);
+
 TabControl1.Tabs.Delete(qi-1);
+TabControl1.TabIndex:=index-1;
 end;
 
 
-procedure TMainForm.closecarefully(index:smallint);
+Function TMainForm.closecarefully(index:smallint):boolean;
 begin
+CloseCarefully:=true;
+Reselect(index);
 
 if (not AllFile[index].saved) and (not AllFile[index].empty) then
 Case MessageDlg('Файл '+AllFile[index].name+' не сохранён. Сохранить?',mtConfirmation,mbYesNoCancel,0) of
 mrYes:begin SaveFile(index); if  AllFile[index].saved then Closefile(index); end;
 mrNo:Closefile(index);
+mrCancel:CloseCarefully:=false;
 end else
 begin
 closefile(index);
@@ -1333,7 +1377,6 @@ end;
 
 procedure TMainForm.MenuItemExitClick(Sender: TObject);
 begin
-  MenuItemCloseAllClick(MainForm);
   MainForm.Close;
 end;
 
@@ -1629,6 +1672,7 @@ end;
 
 procedure TMainForm.RunMessageTimerStopTimer(Sender: TObject);
 begin
+  If RunProcess.Running then RunProcess.Terminate(0);
   SetRunButtons(true,false);
   UnLockInterface;
   MainSynEdit.Invalidate;
@@ -1676,6 +1720,7 @@ var
    i,ii:int32;
    s:string;
 begin
+     If State=wpsDebug then
      for ii:=0 to 1 do
          for i:=1 to WatchGrid.RowCount-2 do
           begin
@@ -1690,13 +1735,19 @@ procedure TMainForm.WatchGridEditingDone(Sender: TObject);
 var
    i: int32;
 begin
-     i:=0;
+     i:=1;
      while i<WatchGrid.RowCount-1 do
-          If (WatchGrid.Cells[0,i]='') and (WatchGrid.Cells[2,i]='') and (WatchGrid.Cells[4,i]='')  then
-             WatchGrid.DeleteRow(I) else inc(i);
+          If (WatchGrid.Cells[0,i]='') and (WatchGrid.Cells[2,i]='') and (WatchGrid.Cells[4,i]='')
+          then
+             WatchGrid.DeleteRow(i)
+          else
+             inc(i);
 
      If (WatchGrid.Cells[0,i]<>'') or (WatchGrid.Cells[2,i]<>'') or (WatchGrid.Cells[4,i]<>'')  then
+     begin
         WatchGrid.RowCount:=WatchGrid.RowCount+1;
+        WatchGrid.Row:=WatchGrid.RowCount;
+     end;
 
      UpdateWatch;
 end;
@@ -1709,7 +1760,6 @@ end;
 
 procedure TMainForm.reselect(new:SmallInt);
 begin
-KostilForDeleteingTab:=false;
 
 If sel<=FileCount then ReloadTo(sel);
  sel:=new;
@@ -1793,13 +1843,17 @@ end;
 
 procedure TMainForm.UpdateState;
 var s,ss:string;
+    th:TSynEdit;
 begin
+If InputSynEdit.Focused then th:=InputSynEdit else
+If OutputSynEdit.Focused then th:=OutputSynEdit else
+   th:=MainSynEdit;
 s:='Состояние:   ';
-s+='| Строка: '+inttostr(MainSynEdit.CaretY)+' ';
-s+='| Столбец: '+inttostr(MainSynEdit.CaretX)+' ';
-s+='| Выделенно: '+inttostr(MainSynEdit.SelEnd-MainSynEdit.SelStart)+' ';
-If MainSynEdit.InsertMode then s+='| Редактирование: вставка ' else s+='| Редактирование: замена ';
-If AllFile[sel].saved then s+='| Статус: сохранён ' else s+='| Статус: не созранён ';
+s+='| Строка: '+inttostr(th.CaretY)+' ';
+s+='| Столбец: '+inttostr(th.CaretX)+' ';
+s+='| Выделенно: '+inttostr(length(th.SelText))+' ';
+If th.InsertMode then s+='| Редактирование: вставка ' else s+='| Редактирование: замена ';
+If AllFile[sel].saved then s+='| Статус: сохранён ' else s+='| Статус: не сохранён ';
 case State of
 wpsCompil: s+='| Программа: компилирование';
 wpsDebug: s+='| Программа: отладка';

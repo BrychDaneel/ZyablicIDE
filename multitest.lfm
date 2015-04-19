@@ -12,7 +12,7 @@ object MultiTestForm: TMultiTestForm
   object Panel4: TPanel
     Left = 0
     Height = 50
-    Top = 67
+    Top = 43
     Width = 561
     Align = alTop
     Caption = 'Panel4'
@@ -41,17 +41,17 @@ object MultiTestForm: TMultiTestForm
       TabOrder = 1
       object CheckBox1: TCheckBox
         Left = 2
-        Height = 26
+        Height = 19
         Top = 1
-        Width = 246
+        Width = 210
         Caption = 'Учитывать пробелы в конце строк'
         TabOrder = 0
       end
       object RadioButton1: TRadioButton
         Left = 1
-        Height = 26
+        Height = 19
         Top = 24
-        Width = 155
+        Width = 128
         Caption = 'Клавиатурный ввод'
         Checked = True
         TabOrder = 2
@@ -59,10 +59,10 @@ object MultiTestForm: TMultiTestForm
       end
       object RadioButton2: TRadioButton
         Left = 160
-        Height = 26
+        Height = 19
         Top = 24
-        Width = 119
-        Caption = 'Ввод из фалов'
+        Width = 106
+        Caption = 'Ввод из файлов'
         OnChange = RadioButton2Change
         TabOrder = 1
       end
@@ -70,13 +70,13 @@ object MultiTestForm: TMultiTestForm
         Left = 288
         Height = 15
         Top = 8
-        Width = 82
-        Caption = 'Входной фал'
+        Width = 78
+        Caption = 'Входной файл'
         ParentColor = False
       end
       object Edit3: TEdit
         Left = 384
-        Height = 21
+        Height = 23
         Top = 2
         Width = 96
         Enabled = False
@@ -87,13 +87,13 @@ object MultiTestForm: TMultiTestForm
         Left = 288
         Height = 15
         Top = 28
-        Width = 92
-        Caption = 'Выходной фал'
+        Width = 87
+        Caption = 'Выходной файл'
         ParentColor = False
       end
       object Edit4: TEdit
         Left = 384
-        Height = 21
+        Height = 23
         Top = 24
         Width = 96
         Enabled = False
@@ -104,20 +104,20 @@ object MultiTestForm: TMultiTestForm
   end
   object GroupBox1: TGroupBox
     Left = 0
-    Height = 67
+    Height = 43
     Top = 0
     Width = 561
     Align = alTop
     AutoSize = True
     Caption = 'Программа'
-    ClientHeight = 36
+    ClientHeight = 23
     ClientWidth = 557
     TabOrder = 1
     object FileNameEdit1: TFileNameEdit
       Left = 0
-      Height = 36
+      Height = 23
       Top = 0
-      Width = 441
+      Width = 453
       FileName = '%t/%n.exe'
       FilterIndex = 0
       HideDirectories = False
@@ -130,7 +130,7 @@ object MultiTestForm: TMultiTestForm
     end
     object SpinEdit1: TSpinEdit
       Left = 507
-      Height = 36
+      Height = 23
       Top = 0
       Width = 50
       Align = alRight
@@ -140,10 +140,10 @@ object MultiTestForm: TMultiTestForm
       TabOrder = 1
     end
     object Label3: TLabel
-      Left = 441
-      Height = 36
+      Left = 453
+      Height = 23
       Top = 0
-      Width = 66
+      Width = 54
       Align = alRight
       Caption = '     Тесты: '
       Layout = tlCenter
@@ -152,8 +152,8 @@ object MultiTestForm: TMultiTestForm
   end
   object ScrollBox1: TScrollBox
     Left = 0
-    Height = 1
-    Top = 117
+    Height = 24
+    Top = 93
     Width = 561
     HorzScrollBar.Page = 1
     VertScrollBar.Page = 1

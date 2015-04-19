@@ -179,8 +179,8 @@ begin
   if RadioButton1.Checked then
   begin
   SynEdit1.Lines.SaveToFile(fi);
-  SynEdit2.Lines.Clear;
-  SynEdit2.Lines.SaveToFile(fo);
+  SynEdit3.Lines.Clear;
+  SynEdit3.Lines.SaveToFile(fo);
   end;
 
         try
@@ -200,6 +200,9 @@ begin
   Process1.Resume;
   Timer1.Enabled:=true;
   end else
+
+
+
   begin
   If RadioButton1.Checked then SynEdit3.Text:=readOutputData(Process1) else begin
     SynEdit3.Lines.LoadFromFile(fo);
@@ -210,7 +213,8 @@ begin
     If deleteIO then sleep(100);
     end;
     end;
-  Test;
+   ShowMessage(SynEdit2.Text);
+   Test;
   end;
 
   end;
