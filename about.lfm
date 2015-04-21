@@ -2,10 +2,10 @@ object AboutForm: TAboutForm
   Left = 57
   Height = 315
   Top = 57
-  Width = 411
+  Width = 389
   Caption = 'AboutForm'
   ClientHeight = 315
-  ClientWidth = 411
+  ClientWidth = 389
   OnCreate = FormCreate
   OnShow = FormShow
   LCLVersion = '1.3'
@@ -13,7 +13,7 @@ object AboutForm: TAboutForm
     Left = 0
     Height = 134
     Top = 0
-    Width = 411
+    Width = 389
     Align = alClient
     Center = True
     Picture.Data = {
@@ -2538,14 +2538,15 @@ object AboutForm: TAboutForm
     Left = 0
     Height = 119
     Top = 164
-    Width = 411
+    Width = 389
     Align = alBottom
     Lines.Strings = (
       'ZyablicIDE небольшая среда быстрой разработки приложений, '
       'ориентированная на подготовку к Белорусской республиканской '
       'олимпиаде. Данная программа является сободным програмным '
-      'обеспечением. Для связи с разработчиком используйте e-mail '
-      'BrychDaneel@mail.ru'
+      'обеспечением. '
+      'Сайт  программы: zyablicide.16mb.com. Для связи с разработчиком '
+      'используйте e-mail BrychDaneel@mail.ru'
     )
     ReadOnly = True
     TabOrder = 0
@@ -2554,7 +2555,7 @@ object AboutForm: TAboutForm
     Left = 0
     Height = 32
     Top = 283
-    Width = 411
+    Width = 389
     Align = alBottom
     Caption = 'Проверить обновление'
     OnClick = Button1Click
@@ -2564,7 +2565,7 @@ object AboutForm: TAboutForm
     Left = 0
     Height = 15
     Top = 134
-    Width = 411
+    Width = 389
     Align = alBottom
     Alignment = taCenter
     Caption = 'Версия: '
@@ -2575,7 +2576,7 @@ object AboutForm: TAboutForm
     Left = 0
     Height = 15
     Top = 149
-    Width = 411
+    Width = 389
     Align = alBottom
     Alignment = taCenter
     Caption = 'Платформа'

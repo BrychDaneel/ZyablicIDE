@@ -211,8 +211,8 @@ begin
   str:=TStringListUTF8.Create;
   LoadStringsFromFileUTF8(str,'version.inf');
   getfilelist(filein,str);
-  Label1.Caption:='Версия: '+filein.zyabvers;
-  Label2.Caption:=' Платорма: '+filein.platform+' (CPU-OS-ВИДЖЕТЫ)';
+  Label1.Caption:=Label1.Caption+filein.zyabvers;
+  Label2.Caption:=Label2.Caption+filein.platform+' (ЦП-СИС-Виджеты)';
   end else
   begin
        Label1.Caption:='Версия: Файл описания не найден';

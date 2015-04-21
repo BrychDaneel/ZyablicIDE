@@ -15,21 +15,25 @@ type
   TSettingForm = class(TForm)
     Button1: TButton;
     ComboBox1: TComboBox;
+    ComboBox2: TComboBox;
+    Edit1: TComboBox;
     FontDialog1: TFontDialog;
     GroupBox1: TGroupBox;
     GroupBox2: TGroupBox;
     GroupBox3: TGroupBox;
+    GroupBox4: TGroupBox;
     Label1: TLabel;
-    Edit1: TLabeledEdit;
     Edit2: TLabeledEdit;
     Edit3: TLabeledEdit;
     Edit4: TLabeledEdit;
     Edit5: TLabeledEdit;
     Edit6: TLabeledEdit;
+    Label2: TLabel;
     ListBox1: TListBox;
     Panel1: TPanel;
     procedure Button1Click(Sender: TObject);
     procedure ComboBox1Select(Sender: TObject);
+    procedure ComboBox2Change(Sender: TObject);
     procedure Edit1Change(Sender: TObject);
     procedure Edit2Change(Sender: TObject);
     procedure Edit3Change(Sender: TObject);
@@ -76,6 +80,11 @@ begin
  end;
 end;
 
+procedure TSettingForm.ComboBox2Change(Sender: TObject);
+begin
+  LoadLanguageFromFile('language'+slash+ComboBox2.Text+'.lng');
+end;
+
 procedure TSettingForm.Edit1Change(Sender: TObject);
 begin
   CompileCommand:=Edit1.Text;
@@ -114,6 +123,8 @@ begin
   Edit4.Text:=GdbComand;
   Edit5.Text:=youname;
   Edit6.Text:=email;
+
+
 end;
 
 procedure TSettingForm.FormShow(Sender: TObject);

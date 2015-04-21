@@ -1,0 +1,198 @@
+﻿Zyablikide
+Terminal
+Input-output
+Entrance file
+Output file
+File
+To create
+To open
+-
+To keep
+To keep as
+To keep everything
+-
+To close
+To close everything
+-
+Exit
+Editing
+To cancel
+To return
+-
+To cut out
+To copy
+To insert
+To remove
+-
+To find
+To find further
+To replace
+Start
+To compile
+To collect exe
+-
+To start
+To stop
+Debugging
+Step
+Step through
+To execute to the cursor
+-
+Value of variables
+GDB console
+The auxiliary
+Calculator
+Table ANSII
+-
+Input-output
+Files
+Emulation of the keyboard
+The console (without debugging)
+-
+Test against a standard
+Manual multitest
+-
+Control
+Reference
+Textbook
+-
+Lizenziya (GPL)
+About the project
+To copy
+To insert
+To cut out
+To remove
+-
+To cancel
+To return
+-
+To find
+To find further
+To replace
+New laying
+To open
+To close the current
+Zyablikgdb
+Settings
+Teams
+To collect exe
+To execute
+Debugger
+To compile
+Definitions
+$NAME
+$E-MAIL
+Editor
+Font
+Syntax
+Language
+AnsiiTableForm
+Symbol
+Code
+HEX
+LienceForm
+AboutForm
+To check updating
+Version: 0.1.1
+ Platorma: i386-win32-win32 (CPU-OS-VIDZhETY)
+AtalonTestForm
+Program
+...
+Standard
+...
+Verdict
+Entrance test
+Standard conclusion
+Program conclusion
+Start
+To consider gaps at the end of the lines
+Keyboard input
+Input from fouls
+Entrance file
+Output file
+MultiTestForm
+Start
+To consider gaps at the end of the lines
+Keyboard input
+Input from files
+Entrance file
+Output file
+Program
+     Tests: 
+Calculator
+0
+
+The hexadecimal
+The binary
+The decimal
+
+Degrees
+Radians
+
+Сообщения
+Наблюдения
+Сообщения компилятора
+Невозможно завершить приложение
+Невозможно прочитать вывод
+Программа завершилась с кодом ошибки: 
+В программе возникло асинхронное событие
+Невозможно запустить программу
+Невозможно запустить компилятор
+Программа запущена
+Невозможно запустить GDB
+Успешно
+Ошибка компиляции
+Компиляция...
+Эмуляция клавиатуры
+Файл 
+ не сохранён. Сохранить?
+Программа завершилась
+Состояние:   
+| Строка: 
+| Столбец: 
+| Выделенно: 
+| Редактирование: вставка 
+| Редактирование: замена 
+| Статус: сохранён 
+| Статус: не сохранён 
+| Программа: компилирование
+| Программа: отладка
+| Программа: редактирование
+| Программа: запущено
+
+Выражение
+Значение
+Примечания
+
+Математическая ошибка
+
+Запуск
+Остановить
+Невозможно запустить эталон 
+Невозможно запустить программу 
+Вердикт
+Слишком много строк
+Слишком мало строк
+Расхождение в строке №
+Совпадение
+
+Ввод
+Ответ
+Вывод
+
+ (ЦП-СИС-Виджеты)
+Версия: Файл описания не найден
+Платформа: Файл описания не найден
+Проверить обновление
+Загрузка: 
+проверка файлов...
+  ОСТАНОВИТЬ
+Обновление успешно загружено. Изменения будут применены после выхода.
+Файл описания не найден. Обновление невозможно. Подробнее смотрите на сайте
+Невозможно подключиться к источнику обновлений
+Доступна версия
+. Установить?
+У вас новая версия, но доступны обнавления для некоторых файлов. Установить?
+
+ZyablicIDE небольшая среда быстрой разработки приложений, ориентированная на подготовку к Белорусской республиканской олимпиаде. Данная программа является сободным програмным обеспечением. 
+Сайт  программы: zyablicide.16mb.com. Для связи с разработчиком используйте e-mail BrychDaneel@mail.ru

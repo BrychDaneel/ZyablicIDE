@@ -1,10 +1,10 @@
 object CalculatorForm: TCalculatorForm
-  Left = 720
-  Height = 230
-  Top = 339
+  Left = 57
+  Height = 243
+  Top = 57
   Width = 472
   Caption = 'Калькулятор'
-  ClientHeight = 230
+  ClientHeight = 243
   ClientWidth = 472
   OnCreate = FormCreate
   OnKeyDown = Edit1KeyDown
@@ -12,7 +12,7 @@ object CalculatorForm: TCalculatorForm
   LCLVersion = '1.3'
   object Edit1: TEdit
     Left = 0
-    Height = 29
+    Height = 30
     Top = 0
     Width = 472
     Align = alTop
@@ -33,7 +33,7 @@ object CalculatorForm: TCalculatorForm
     Tag = 7
     Left = 43
     Height = 30
-    Top = 102
+    Top = 117
     Width = 30
     Caption = '7'
     OnClick = Button0Click
@@ -45,7 +45,7 @@ object CalculatorForm: TCalculatorForm
     Tag = 8
     Left = 75
     Height = 30
-    Top = 102
+    Top = 117
     Width = 30
     Caption = '8'
     OnClick = Button0Click
@@ -57,7 +57,7 @@ object CalculatorForm: TCalculatorForm
     Tag = 9
     Left = 107
     Height = 30
-    Top = 102
+    Top = 117
     Width = 30
     Caption = '9'
     OnClick = Button0Click
@@ -69,7 +69,7 @@ object CalculatorForm: TCalculatorForm
     Tag = 4
     Left = 43
     Height = 30
-    Top = 134
+    Top = 149
     Width = 30
     Caption = '4'
     OnClick = Button0Click
@@ -81,7 +81,7 @@ object CalculatorForm: TCalculatorForm
     Tag = 5
     Left = 75
     Height = 30
-    Top = 134
+    Top = 149
     Width = 30
     Caption = '5'
     OnClick = Button0Click
@@ -93,7 +93,7 @@ object CalculatorForm: TCalculatorForm
     Tag = 6
     Left = 107
     Height = 30
-    Top = 134
+    Top = 149
     Width = 30
     Caption = '6'
     OnClick = Button0Click
@@ -105,7 +105,7 @@ object CalculatorForm: TCalculatorForm
     Tag = 1
     Left = 43
     Height = 30
-    Top = 166
+    Top = 181
     Width = 30
     Caption = '1'
     OnClick = Button0Click
@@ -117,7 +117,7 @@ object CalculatorForm: TCalculatorForm
     Tag = 2
     Left = 75
     Height = 30
-    Top = 166
+    Top = 181
     Width = 30
     Caption = '2'
     OnClick = Button0Click
@@ -129,7 +129,7 @@ object CalculatorForm: TCalculatorForm
     Tag = 3
     Left = 107
     Height = 30
-    Top = 166
+    Top = 181
     Width = 30
     Caption = '3'
     OnClick = Button0Click
@@ -140,7 +140,7 @@ object CalculatorForm: TCalculatorForm
   object Button0: TButton
     Left = 43
     Height = 30
-    Top = 198
+    Top = 213
     Width = 30
     Caption = '0'
     OnClick = Button0Click
@@ -149,9 +149,10 @@ object CalculatorForm: TCalculatorForm
     TabOrder = 10
   end
   object Button11: TButton
+    Tag = -1
     Left = 75
     Height = 30
-    Top = 198
+    Top = 213
     Width = 30
     Caption = '-'
     OnClick = Button11Click
@@ -160,9 +161,10 @@ object CalculatorForm: TCalculatorForm
     TabOrder = 11
   end
   object ButtonFrack: TButton
+    Tag = -1
     Left = 107
     Height = 30
-    Top = 198
+    Top = 213
     Width = 30
     Caption = '.'
     OnClick = ButtonFrackClick
@@ -171,9 +173,10 @@ object CalculatorForm: TCalculatorForm
     TabOrder = 12
   end
   object MPButton: TButton
+    Tag = -1
     Left = 3
     Height = 30
-    Top = 134
+    Top = 149
     Width = 30
     Caption = 'M+'
     OnClick = MPButtonClick
@@ -182,9 +185,10 @@ object CalculatorForm: TCalculatorForm
     TabOrder = 13
   end
   object MMButton: TButton
+    Tag = -1
     Left = 3
     Height = 30
-    Top = 166
+    Top = 181
     Width = 30
     Caption = 'M-'
     OnClick = MMButtonClick
@@ -193,9 +197,10 @@ object CalculatorForm: TCalculatorForm
     TabOrder = 14
   end
   object MButton: TButton
+    Tag = -1
     Left = 3
     Height = 30
-    Top = 197
+    Top = 212
     Width = 30
     Caption = 'M'
     OnClick = MButtonClick
@@ -204,9 +209,10 @@ object CalculatorForm: TCalculatorForm
     TabOrder = 15
   end
   object MCButton: TButton
+    Tag = -1
     Left = 3
     Height = 30
-    Top = 102
+    Top = 117
     Width = 30
     Caption = 'MC'
     OnClick = MCButtonClick
@@ -218,7 +224,7 @@ object CalculatorForm: TCalculatorForm
     Tag = 1
     Left = 216
     Height = 30
-    Top = 104
+    Top = 119
     Width = 30
     Caption = '+'
     OnClick = BinoOperator
@@ -230,7 +236,7 @@ object CalculatorForm: TCalculatorForm
     Tag = 2
     Left = 216
     Height = 30
-    Top = 136
+    Top = 151
     Width = 30
     Caption = '-'
     OnClick = BinoOperator
@@ -242,7 +248,7 @@ object CalculatorForm: TCalculatorForm
     Tag = 3
     Left = 216
     Height = 30
-    Top = 168
+    Top = 183
     Width = 30
     Caption = '*'
     OnClick = BinoOperator
@@ -254,7 +260,7 @@ object CalculatorForm: TCalculatorForm
     Tag = 4
     Left = 216
     Height = 30
-    Top = 199
+    Top = 214
     Width = 30
     Caption = 'div'
     OnClick = BinoOperator
@@ -266,7 +272,7 @@ object CalculatorForm: TCalculatorForm
     Tag = 6
     Left = 248
     Height = 30
-    Top = 136
+    Top = 151
     Width = 30
     Caption = 'rnd'
     OnClick = UnoOperator
@@ -278,7 +284,7 @@ object CalculatorForm: TCalculatorForm
     Tag = 5
     Left = 248
     Height = 30
-    Top = 104
+    Top = 119
     Width = 30
     Caption = '/'
     OnClick = BinoOperator
@@ -290,7 +296,7 @@ object CalculatorForm: TCalculatorForm
     Tag = 7
     Left = 248
     Height = 30
-    Top = 167
+    Top = 182
     Width = 30
     Caption = 'frc'
     OnClick = UnoOperator
@@ -299,9 +305,10 @@ object CalculatorForm: TCalculatorForm
     TabOrder = 23
   end
   object ButtonRav: TButton
+    Tag = -1
     Left = 248
     Height = 30
-    Top = 199
+    Top = 214
     Width = 30
     Caption = '='
     OnClick = ButtonRavClick
@@ -313,7 +320,7 @@ object CalculatorForm: TCalculatorForm
     Tag = 8
     Left = 327
     Height = 30
-    Top = 104
+    Top = 119
     Width = 30
     Caption = '^2'
     OnClick = UnoOperator
@@ -325,7 +332,7 @@ object CalculatorForm: TCalculatorForm
     Tag = 9
     Left = 327
     Height = 30
-    Top = 136
+    Top = 151
     Width = 30
     Caption = '^y'
     OnClick = BinoOperator
@@ -337,7 +344,7 @@ object CalculatorForm: TCalculatorForm
     Tag = 10
     Left = 327
     Height = 30
-    Top = 168
+    Top = 183
     Width = 30
     Caption = 'sqrt'
     OnClick = UnoOperator
@@ -349,7 +356,7 @@ object CalculatorForm: TCalculatorForm
     Tag = 11
     Left = 327
     Height = 30
-    Top = 200
+    Top = 215
     Width = 30
     Caption = 'sqrY'
     OnClick = BinoOperator
@@ -361,7 +368,7 @@ object CalculatorForm: TCalculatorForm
     Tag = 12
     Left = 367
     Height = 30
-    Top = 104
+    Top = 119
     Width = 30
     Caption = 'ln'
     OnClick = UnoOperator
@@ -373,7 +380,7 @@ object CalculatorForm: TCalculatorForm
     Tag = 13
     Left = 367
     Height = 30
-    Top = 136
+    Top = 151
     Width = 30
     Caption = 'lg'
     OnClick = UnoOperator
@@ -385,7 +392,7 @@ object CalculatorForm: TCalculatorForm
     Tag = 14
     Left = 367
     Height = 30
-    Top = 167
+    Top = 182
     Width = 30
     Caption = 'log2'
     OnClick = UnoOperator
@@ -397,7 +404,7 @@ object CalculatorForm: TCalculatorForm
     Tag = 15
     Left = 367
     Height = 30
-    Top = 199
+    Top = 214
     Width = 30
     Caption = 'logY'
     OnClick = BinoOperator
@@ -406,9 +413,10 @@ object CalculatorForm: TCalculatorForm
     TabOrder = 32
   end
   object ButtonPi: TButton
-    Left = 248
+    Tag = -1
+    Left = 216
     Height = 30
-    Top = 67
+    Top = 80
     Width = 40
     Caption = 'pi'
     OnClick = ButtonPiClick
@@ -417,9 +425,10 @@ object CalculatorForm: TCalculatorForm
     TabOrder = 33
   end
   object ButtonByte: TButton
-    Left = 367
+    Tag = -1
+    Left = 336
     Height = 30
-    Top = 67
+    Top = 80
     Width = 38
     Caption = 'byte'
     OnClick = ButtonByteClick
@@ -428,9 +437,10 @@ object CalculatorForm: TCalculatorForm
     TabOrder = 34
   end
   object ButtonLong: TButton
-    Left = 424
+    Tag = -1
+    Left = 392
     Height = 30
-    Top = 67
+    Top = 80
     Width = 40
     Caption = 'long'
     OnClick = ButtonLongClick
@@ -439,9 +449,10 @@ object CalculatorForm: TCalculatorForm
     TabOrder = 35
   end
   object ButtonExp: TButton
-    Left = 304
+    Tag = -1
+    Left = 280
     Height = 30
-    Top = 67
+    Top = 80
     Width = 40
     Caption = 'exp'
     OnClick = ButtonExpClick
@@ -453,7 +464,7 @@ object CalculatorForm: TCalculatorForm
     Tag = 16
     Left = 407
     Height = 30
-    Top = 104
+    Top = 119
     Width = 30
     Caption = 'sin'
     OnClick = UnoOperator
@@ -465,7 +476,7 @@ object CalculatorForm: TCalculatorForm
     Tag = 17
     Left = 407
     Height = 30
-    Top = 136
+    Top = 151
     Width = 30
     Caption = 'cos'
     OnClick = UnoOperator
@@ -477,7 +488,7 @@ object CalculatorForm: TCalculatorForm
     Tag = 18
     Left = 407
     Height = 30
-    Top = 168
+    Top = 183
     Width = 30
     Caption = 'tan'
     OnClick = UnoOperator
@@ -489,7 +500,7 @@ object CalculatorForm: TCalculatorForm
     Tag = 19
     Left = 407
     Height = 30
-    Top = 199
+    Top = 214
     Width = 30
     Caption = 'ctg'
     OnClick = UnoOperator
@@ -501,7 +512,7 @@ object CalculatorForm: TCalculatorForm
     Tag = 20
     Left = 439
     Height = 30
-    Top = 104
+    Top = 119
     Width = 30
     Caption = 'asin'
     OnClick = UnoOperator
@@ -513,7 +524,7 @@ object CalculatorForm: TCalculatorForm
     Tag = 21
     Left = 439
     Height = 30
-    Top = 136
+    Top = 151
     Width = 30
     Caption = 'acos'
     OnClick = UnoOperator
@@ -525,7 +536,7 @@ object CalculatorForm: TCalculatorForm
     Tag = 22
     Left = 439
     Height = 30
-    Top = 168
+    Top = 183
     Width = 30
     Caption = 'atan'
     OnClick = UnoOperator
@@ -537,7 +548,7 @@ object CalculatorForm: TCalculatorForm
     Tag = 23
     Left = 439
     Height = 30
-    Top = 199
+    Top = 214
     Width = 30
     Caption = 'actg'
     OnClick = UnoOperator
@@ -546,9 +557,10 @@ object CalculatorForm: TCalculatorForm
     TabOrder = 44
   end
   object ButtonBackSpace: TButton
-    Left = 432
+    Tag = -1
+    Left = 429
     Height = 33
-    Top = 31
+    Top = 40
     Width = 40
     Caption = '<--'
     OnClick = ButtonBackSpaceClick
@@ -558,19 +570,19 @@ object CalculatorForm: TCalculatorForm
   end
   object GroupBox1: TGroupBox
     Left = 0
-    Height = 32
+    Height = 41
     Top = 31
-    Width = 357
-    ClientHeight = 28
-    ClientWidth = 353
+    Width = 333
+    ClientHeight = 21
+    ClientWidth = 329
     TabOrder = 46
     OnKeyDown = Edit1KeyDown
     OnKeyPress = Edit1KeyPress
     object RadioButtonHEX: TRadioButton
       Left = 184
-      Height = 26
+      Height = 19
       Top = 0
-      Width = 160
+      Width = 133
       Caption = 'Шестнадцатиричное'
       OnChange = RadioButtonDECChange
       OnKeyDown = Edit1KeyDown
@@ -579,9 +591,9 @@ object CalculatorForm: TCalculatorForm
     end
     object RadioButtonBIN: TRadioButton
       Left = 100
-      Height = 26
+      Height = 19
       Top = 0
-      Width = 89
+      Width = 74
       Caption = 'Бинарное'
       OnChange = RadioButtonDECChange
       OnKeyDown = Edit1KeyDown
@@ -590,9 +602,9 @@ object CalculatorForm: TCalculatorForm
     end
     object RadioButtonDEC: TRadioButton
       Left = 0
-      Height = 26
+      Height = 19
       Top = 0
-      Width = 102
+      Width = 85
       Caption = 'Десятичное'
       Checked = True
       OnChange = RadioButtonDECChange
@@ -604,19 +616,19 @@ object CalculatorForm: TCalculatorForm
   end
   object GroupBox2: TGroupBox
     Left = 0
-    Height = 33
-    Top = 61
+    Height = 45
+    Top = 67
     Width = 194
-    ClientHeight = 29
+    ClientHeight = 25
     ClientWidth = 190
     TabOrder = 47
     OnKeyDown = Edit1KeyDown
     OnKeyPress = Edit1KeyPress
     object RadioButtonDeg: TRadioButton
       Left = 0
-      Height = 26
+      Height = 19
       Top = 0
-      Width = 82
+      Width = 66
       Caption = 'Градусы'
       Checked = True
       OnKeyDown = Edit1KeyDown
@@ -626,9 +638,9 @@ object CalculatorForm: TCalculatorForm
     end
     object RadioButtonRad: TRadioButton
       Left = 100
-      Height = 26
+      Height = 19
       Top = 0
-      Width = 83
+      Width = 68
       Caption = 'Радианы'
       OnKeyDown = Edit1KeyDown
       OnKeyPress = Edit1KeyPress
@@ -639,7 +651,7 @@ object CalculatorForm: TCalculatorForm
     Tag = 24
     Left = 288
     Height = 30
-    Top = 104
+    Top = 119
     Width = 30
     Caption = 'and'
     OnClick = BinoOperator
@@ -651,7 +663,7 @@ object CalculatorForm: TCalculatorForm
     Tag = 26
     Left = 288
     Height = 30
-    Top = 136
+    Top = 151
     Width = 30
     Caption = 'or'
     OnClick = BinoOperator
@@ -663,7 +675,7 @@ object CalculatorForm: TCalculatorForm
     Tag = 26
     Left = 288
     Height = 30
-    Top = 168
+    Top = 183
     Width = 30
     Caption = 'xor'
     OnClick = BinoOperator
@@ -675,7 +687,7 @@ object CalculatorForm: TCalculatorForm
     Tag = 27
     Left = 288
     Height = 30
-    Top = 199
+    Top = 214
     Width = 30
     Caption = 'not'
     OnClick = UnoOperator
@@ -687,7 +699,7 @@ object CalculatorForm: TCalculatorForm
     Tag = 10
     Left = 144
     Height = 30
-    Top = 102
+    Top = 117
     Width = 30
     Caption = 'A'
     OnClick = Button0Click
@@ -699,7 +711,7 @@ object CalculatorForm: TCalculatorForm
     Tag = 11
     Left = 144
     Height = 30
-    Top = 134
+    Top = 149
     Width = 30
     Caption = 'B'
     OnClick = Button0Click
@@ -711,7 +723,7 @@ object CalculatorForm: TCalculatorForm
     Tag = 12
     Left = 144
     Height = 30
-    Top = 166
+    Top = 181
     Width = 30
     Caption = 'C'
     OnClick = Button0Click
@@ -723,7 +735,7 @@ object CalculatorForm: TCalculatorForm
     Tag = 13
     Left = 144
     Height = 30
-    Top = 197
+    Top = 212
     Width = 30
     Caption = 'D'
     OnClick = Button0Click
@@ -735,7 +747,7 @@ object CalculatorForm: TCalculatorForm
     Tag = 14
     Left = 176
     Height = 30
-    Top = 102
+    Top = 117
     Width = 30
     Caption = 'E'
     OnClick = Button0Click
@@ -747,7 +759,7 @@ object CalculatorForm: TCalculatorForm
     Tag = 15
     Left = 176
     Height = 30
-    Top = 134
+    Top = 149
     Width = 30
     Caption = 'F'
     OnClick = Button0Click
@@ -759,7 +771,7 @@ object CalculatorForm: TCalculatorForm
     Tag = 2
     Left = 176
     Height = 30
-    Top = 166
+    Top = 181
     Width = 30
     Caption = '00'
     OnClick = ButtonCenterClick
@@ -771,7 +783,7 @@ object CalculatorForm: TCalculatorForm
     Tag = 3
     Left = 176
     Height = 30
-    Top = 197
+    Top = 212
     Width = 30
     Caption = '000'
     OnClick = ButtonCenterClick
@@ -780,9 +792,10 @@ object CalculatorForm: TCalculatorForm
     TabOrder = 59
   end
   object ButtonClearAll: TButton
-    Left = 392
+    Tag = -1
+    Left = 381
     Height = 32
-    Top = 31
+    Top = 40
     Width = 43
     Caption = 'CA'
     OnClick = ButtonClearAllClick
@@ -791,9 +804,10 @@ object CalculatorForm: TCalculatorForm
     TabOrder = 60
   end
   object ButtonClear: TButton
-    Left = 352
+    Tag = -1
+    Left = 336
     Height = 33
-    Top = 31
+    Top = 39
     Width = 43
     Caption = 'C'
     OnClick = ButtonClearClick

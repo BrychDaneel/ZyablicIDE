@@ -266,6 +266,7 @@ type
     procedure CorrectWatch(var s:string);
     procedure openfile(const filename:string);
     procedure UpdateWatch;
+
   private
     { private declarations }
   public
@@ -275,6 +276,8 @@ type
 
   function AddDefines(s:String):String;
   function readOutputData(process:TProcess):string;
+  procedure LoadLanguageFromFile(Source:string);
+
 var
   MainForm: TMainForm;
    WaitForExecute:boolean=false;
@@ -307,6 +310,7 @@ var
 
    youname:string='Brychikov Daneel';
    email:string='BrychDaneel@mail.ru';
+   Syntax,Language:uint8;
 
    CompileCommand,RunComand,GdbComand,BuildCommand:string;
    wantUpdate:boolean=false;
@@ -427,6 +431,7 @@ var prpath:string;
      If par=LowerCase('GdbComand') then  GdbComand:=val;
      if par=LowerCase('NAME') then youname:=val;
      if par=LowerCase('E-MAIL') then email:=val;
+     if par=LowerCase('Syntax') then email:=val;
      end;
   pr.Free;
  end;
@@ -525,10 +530,10 @@ procedure TMainForm.breakline(s:string);
 var ss:string;
 begin
  If skipBreak then begin skipBreak:=false; exit; end;
- if pos(LinuxStyleSlash(AllFile[sel].fullpath),s)=0 then
+ if pos(LinuxStyleSlash(AllFile[sel].fullpath),LinuxStyleSlash(s))=0 then
     If not crash then WriteGDB('finish')  else  WriteGDB('up 1') else
     begin
-    delete(s,1,pos(LinuxStyleSlash(AllFile[sel].fullpath),s)+length(LinuxStyleSlash(AllFile[sel].fullpath)));
+    delete(s,1,pos(LinuxStyleSlash(AllFile[sel].fullpath),LinuxStyleSlash(s))+length(LinuxStyleSlash(AllFile[sel].fullpath)));
     stopline:=StrToInt(copy(s,1,pos(':',s)-1));
     BrLineTimer.Enabled:=false;
     MainSynEdit.CaretY:=stopline;
@@ -557,6 +562,7 @@ begin
   begin
   ParseByLine(s,ss);
 
+  If pos('in __mingw_CRTStartup ()',ss)<>0 then WriteGDB('n');
 
   if ss='' then Continue;
 
@@ -835,7 +841,7 @@ begin
 MessageSynMemo.Lines.Add(ss);
 If errorLine=-1 then MessageSynMemo.CaretY:=MessageSynMemo.Lines.Count;
 end;
-If ((errorLine=-1) and ((pos('Error:',ss)<>0) or (pos('Fatal:',ss)<>0))) and (copy(ss,1,pos('(',ss)-1)=ExtractFileName(AllFile[sel].fullpath)) then
+If ((errorLine=-1) and ((pos('error:',lowercase(ss))<>0) or (pos('fatal:',lowercase(ss))<>0))) and (copy(ss,1,pos('(',ss)-1)=ExtractFileName(AllFile[sel].fullpath)) then
 begin
       val(copy(ss,pos('(',ss)+1,pos(',',ss)-pos('(',ss)-1), errorLine, code);
       If code=0 then
@@ -846,6 +852,21 @@ begin
       else
           errorLine:=-1;
 end;
+
+If ((errorLine=-1) and ((pos('error:',lowercase(ss))<>0) or (pos('fatal:',lowercase(ss))<>0))) and (pos(AllFile[sel].fullpath,ss)<>0) then
+begin
+      delete(ss,1,pos(AllFile[sel].fullpath,ss)+length(AllFile[sel].fullpath));
+      val(copy(ss,1,pos(':',ss)-1), errorLine, code);
+      If code=0 then
+      begin
+          MainSynEdit.CaretY:=errorLine;
+          MainSynEdit.Invalidate;
+      end
+      else
+          errorLine:=-1;
+end;
+
+
 end;
 
 if not CompProcess.Running then
@@ -1097,7 +1118,7 @@ end;
 
 procedure TMainForm.MenuItemHelpClick(Sender: TObject);
 begin
-  ShowMessage('Пока нету');
+  ShowMessage('Not yet');
 end;
 
 procedure TMainForm.MenuItemInputConsoleClick(Sender: TObject);
@@ -1274,6 +1295,7 @@ State:=wpsCompil;
 MessageSynMemo.Lines.Clear;
 MessageSynMemo.Lines.Add('Компиляция...');
 CompProcess.CommandLine:=AddDefines(CompileCommand);
+MessageSynMemo.Lines.Add(CompProcess.CommandLine);
 try
 CompProcess.Execute;
 except
@@ -1511,6 +1533,7 @@ with allfile[index] do
  begin
  fullpath:=MainForm.SaveDialog1.FileName;
  If (SaveDialog1.FilterIndex=1) and (copy(fullpath,length(fullpath)-3,4)<>'.pas') then fullpath+='.pas';
+ If (SaveDialog1.FilterIndex=2) and (copy(fullpath,length(fullpath)-3,4)<>'.cpp') then fullpath+='.cpp';
  name:=ExtractFileName(fullpath);
  MainForm.TabControl1.Tabs[index-1]:=name;
  ReloadTo(index);
@@ -1627,13 +1650,13 @@ procedure TMainForm.MessageSynMemoSpecialLineColors(Sender: TObject;
   Line: integer; var Special: boolean; var FG, BG: TColor);
 begin
 
-  if (pos('Error:',MessageSynMemo.Lines[line-1])<>0) or  (pos('Fatal:',MessageSynMemo.Lines[line-1])<>0) or (pos('Ошибка компиляции',MessageSynMemo.Lines[line-1])<>0) then
+  if (pos('error:',lowercase(MessageSynMemo.Lines[line-1]))<>0) or  (pos('fatal:',lowercase(MessageSynMemo.Lines[line-1]))<>0) or (pos('Ошибка компиляции',MessageSynMemo.Lines[line-1])<>0) then
   begin
   Special:=true;
   fg:=clRed;
   end;
 
-  if (pos('Warning:',MessageSynMemo.Lines[line-1])<>0) or (pos('Hits:',MessageSynMemo.Lines[line-1])<>0) or (pos('Note:',MessageSynMemo.Lines[line-1])<>0)  then
+  if (pos('warning:',lowercase(MessageSynMemo.Lines[line-1]))<>0) or (pos('hits:',lowercase(MessageSynMemo.Lines[line-1]))<>0) or (pos('note:',lowercase(MessageSynMemo.Lines[line-1]))<>0)  then
   begin
   Special:=true;
   fg:=clBlue;
@@ -1929,6 +1952,99 @@ insert('\',s,q);
 end;
 WindowsStyleSlash:=s;
 end;
+
+
+function gettext(str:TStringListUTF8;var nb:LongInt):String;
+begin
+gettext:=str[nb];
+inc(nb);
+end;
+
+procedure LoadLanguageFromFile(Source:string);
+var i,ii,u:longint;
+    str:TStringListUTF8;
+    th:TComponent;
+begin
+    { str:=TStringListUTF8.Create;
+    For ii:=0 to Application.ComponentCount-1 do
+     with TForm(Application.Components[ii]) do
+     begin
+         str.Add(Caption);
+
+        for i:=0 to ComponentCount-1 do
+        begin
+             if Components[i] is TMenuItem then
+                str.Add(TMenuItem(Components[i]).Caption);
+
+             if (Components[i] is TButton) and (Components[i].Tag=0) then
+                str.Add(TButton(Components[i]).Caption);
+
+             if Components[i] is TLabel then
+                str.Add(TLabel(Components[i]).Caption);
+
+             if Components[i] is TRadioButton then
+                str.Add(TRadioButton(Components[i]).Caption);
+
+             if Components[i] is TGroupBox then
+                str.Add(TGroupBox(Components[i]).Caption);
+
+             if Components[i] is TLabeledEdit then
+                str.Add(TLabeledEdit(Components[i]).EditLabel.Caption);
+
+             if Components[i] is TCheckBox then
+                str.Add(TCheckBox(Components[i]).Caption);
+
+             {$B-}
+             if (Components[i] is TPanel) and (TPanel(Components[i]).Caption<>'')  then
+                str.Add(TPanel(Components[i]).Caption);
+             {$B+}
+
+
+        end;
+     end;
+    str.SaveToFile(Source);
+    str.Free; }
+    STR:=TStringListUTF8.Create;
+    str.LoadFromFile(Source);
+    u:=0;
+    For ii:=0 to Application.ComponentCount-1 do
+     with TForm(Application.Components[ii]) do
+     begin
+         Caption:=gettext(str,u);
+
+        for i:=0 to ComponentCount-1 do
+        begin
+             if Components[i] is TMenuItem then
+                TMenuItem(Components[i]).Caption:=gettext(str,u);
+
+             if (Components[i] is TButton) and (Components[i].Tag=0) then
+                TButton(Components[i]).Caption:=gettext(str,u);
+
+             if Components[i] is TLabel then
+                TLabel(Components[i]).Caption:=gettext(str,u);
+
+             if Components[i] is TRadioButton then
+                TRadioButton(Components[i]).Caption:=gettext(str,u);
+
+             if Components[i] is TGroupBox then
+                TGroupBox(Components[i]).Caption:=gettext(str,u);
+
+             if Components[i] is TLabeledEdit then
+                TLabeledEdit(Components[i]).EditLabel.Caption:=gettext(str,u);
+
+             if Components[i] is TCheckBox then
+                TCheckBox(Components[i]).Caption:=gettext(str,u);
+
+             {$B-}
+             if (Components[i] is TPanel) and (TPanel(Components[i]).Caption<>'') then
+                TPanel(Components[i]).Caption:=gettext(str,u);
+             {$B+}
+        end;
+     end;
+    str.Free;
+end;
+
+
 
 end.
 

@@ -1,7 +1,7 @@
 object AtalonTestForm: TAtalonTestForm
-  Left = 0
+  Left = 57
   Height = 296
-  Top = 0
+  Top = 57
   Width = 639
   Caption = 'AtalonTestForm'
   ClientHeight = 296
@@ -1648,7 +1648,6 @@ object AtalonTestForm: TAtalonTestForm
     Top = 58
     Width = 639
     Align = alTop
-    Caption = 'Panel4'
     ClientHeight = 50
     ClientWidth = 639
     TabOrder = 7

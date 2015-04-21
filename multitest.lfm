@@ -1,7 +1,7 @@
 object MultiTestForm: TMultiTestForm
-  Left = 370
+  Left = 57
   Height = 117
-  Top = 163
+  Top = 57
   Width = 561
   AutoSize = True
   Caption = 'MultiTestForm'
@@ -15,7 +15,6 @@ object MultiTestForm: TMultiTestForm
     Top = 43
     Width = 561
     Align = alTop
-    Caption = 'Panel4'
     ClientHeight = 50
     ClientWidth = 561
     TabOrder = 0

@@ -1,7 +1,7 @@
 object LienceForm: TLienceForm
-  Left = 0
+  Left = 57
   Height = 636
-  Top = 0
+  Top = 57
   Width = 554
   Caption = 'LienceForm'
   ClientHeight = 636

@@ -55,7 +55,6 @@ object MainForm: TMainForm
       Top = 23
       Width = 994
       Align = alClient
-      Caption = 'WatchPanel'
       ClientHeight = 125
       ClientWidth = 994
       TabOrder = 2
@@ -100,7 +99,6 @@ object MainForm: TMainForm
       Top = 23
       Width = 994
       Align = alClient
-      Caption = 'MessagePanel'
       ClientHeight = 125
       ClientWidth = 994
       TabOrder = 1
@@ -2716,7 +2714,6 @@ object MainForm: TMainForm
     end
   end
   object SynPasSyn1: TSynPasSyn
-    Enabled = False
     AsmAttri.FrameEdges = sfeAround
     CommentAttri.Foreground = clGray
     CommentAttri.FrameEdges = sfeAround
@@ -7110,13 +7107,14 @@ object MainForm: TMainForm
     }
   end
   object OpenDialog1: TOpenDialog
+    Filter = 'PascalFile|*.pas|C++ File|*.c;*.cpp;*.h;*.hpp;*.hh|AllFile|*.*'
     left = 128
     top = 184
   end
   object SaveDialog1: TSaveDialog
     Width = 1021
     Height = 695
-    Filter = 'PascalFile|*.pas|AllFile|*.*'
+    Filter = 'PascalFile|*.pas|C++ File|*.cpp|AllFile|*.*'
     left = 72
     top = 184
   end
@@ -7166,7 +7164,7 @@ object MainForm: TMainForm
   object CompProcess: TProcessUTF8
     PipeBufferSize = 1048576
     Active = False
-    Options = [poUsePipes]
+    Options = [poUsePipes, poStderrToOutPut]
     Priority = ppNormal
     StartupOptions = [suoUseShowWindow]
     ShowWindow = swoHIDE
@@ -7233,16 +7231,22 @@ object MainForm: TMainForm
   end
   object SynCppSyn1: TSynCppSyn
     DefaultFilter = 'Файлы C++ (*.c,*.cpp,*.h,*.hpp,*.hh)|*.c;*.cpp;*.h;*.hpp;*.hh'
-    Enabled = False
     AsmAttri.FrameEdges = sfeAround
+    CommentAttri.Foreground = clGray
     CommentAttri.FrameEdges = sfeAround
+    DirecAttri.Foreground = clRed
     DirecAttri.FrameEdges = sfeAround
+    IdentifierAttri.Foreground = clBlack
     IdentifierAttri.FrameEdges = sfeAround
     InvalidAttri.FrameEdges = sfeAround
+    KeyAttri.Foreground = clNavy
     KeyAttri.FrameEdges = sfeAround
+    NumberAttri.Foreground = clGreen
     NumberAttri.FrameEdges = sfeAround
     SpaceAttri.FrameEdges = sfeAround
+    StringAttri.Foreground = clBlue
     StringAttri.FrameEdges = sfeAround
+    SymbolAttri.Foreground = clRed
     SymbolAttri.FrameEdges = sfeAround
     left = 497
     top = 250
