@@ -2714,6 +2714,7 @@ object MainForm: TMainForm
     end
   end
   object SynPasSyn1: TSynPasSyn
+    Enabled = False
     AsmAttri.FrameEdges = sfeAround
     CommentAttri.Foreground = clGray
     CommentAttri.FrameEdges = sfeAround
@@ -7198,7 +7199,7 @@ object MainForm: TMainForm
   object RunProcess: TProcessUTF8
     PipeBufferSize = 1048576
     Active = False
-    Options = [poUsePipes]
+    Options = [poUsePipes, poStderrToOutPut]
     Priority = ppNormal
     StartupOptions = [suoUseShowWindow]
     ShowWindow = swoHIDE
@@ -7231,6 +7232,7 @@ object MainForm: TMainForm
   end
   object SynCppSyn1: TSynCppSyn
     DefaultFilter = 'Файлы C++ (*.c,*.cpp,*.h,*.hpp,*.hh)|*.c;*.cpp;*.h;*.hpp;*.hh'
+    Enabled = False
     AsmAttri.FrameEdges = sfeAround
     CommentAttri.Foreground = clGray
     CommentAttri.FrameEdges = sfeAround

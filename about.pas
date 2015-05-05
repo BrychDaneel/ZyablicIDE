@@ -212,11 +212,11 @@ begin
   LoadStringsFromFileUTF8(str,'version.inf');
   getfilelist(filein,str);
   Label1.Caption:=Label1.Caption+filein.zyabvers;
-  Label2.Caption:=Label2.Caption+filein.platform+' (ЦП-СИС-Виджеты)';
+  Label2.Caption:=Label2.Caption+filein.platform+strCP_OS_WJ;
   end else
   begin
-       Label1.Caption:='Версия: Файл описания не найден';
-       Label2.Caption:='Платформа: Файл описания не найден';
+       Label1.Caption:=strVersion;
+       Label2.Caption:=strPlatform;
   end;
 end;
 
@@ -226,8 +226,8 @@ with AboutForm do
 begin
      ProgressTimer.Enabled:=false;
      wantUpdate:=true;
-     ShowMessage('Обновление успешно загружено. Изменения будут применены после выхода.');
-     Button1.Caption:='Проверить обновление';
+     ShowMessage(strUpdateWasDown);
+     Button1.Caption:=strCheckUpd;
 end;
 end;
 
@@ -246,7 +246,7 @@ begin
               DeleteFileUTF8(upfile[i]);
 
     //If Sender is TDownloadThread then ShowMessage('Ошибка при загрузке');
-    Button1.Caption:='Проверить обновление';
+    Button1.Caption:=strCheckUpd;
 end;
 end;
 
@@ -288,13 +288,13 @@ procedure TAboutForm.ProgressTimerTimer(Sender: TObject);
 var ns,ds,fs:int64;
    pr:int32;
 begin
-  if not Assigned(DownloadThread.Stream) then Button1.Caption:='Загрузка: проверка файлов...  ОСТАНОВИТЬ' else
+  if not Assigned(DownloadThread.Stream) then Button1.Caption:=strFileCheck+strSTOPSTOP else
      begin
      ns:=DownloadThread.Stream.Size;
      ds:=DownloadThread.doneload;
      if DownloadThread.maxload=0 then fs:=1 else fs:=DownloadThread.maxload;
      pr:=Round(((ds+ns)/fs)*100);
-     Button1.Caption:='Загрузка: '+IntToStr(pr)+'% ('+FloatToStr(trunc(fs/1024/1024*100)/100)+'МБ)   ОСТАНОВИТЬ';
+     Button1.Caption:=strDownload+IntToStr(pr)+'% ('+FloatToStr(trunc(fs/1024/1024*100)/100)+'МБ)   '+strSTOPSTOP;
      end;
 end;
 
@@ -325,7 +325,7 @@ str:=TStringListUTF8.Create;
 
 if filein.platform='' then
 begin
-ShowMessage('Файл описания не найден. Обновление невозможно. Подробнее смотрите на сайте');
+ShowMessage(strCantFound);
  exit;
 end;
 
@@ -334,7 +334,7 @@ end;
     FPHTTPClient.SimpleGet(filein.updatesource+filein.platform+'/version.inf',str);
  Except
    FPHTTPClient.Free;
-   ShowMessage('Невозможно подключиться к источнику обновлений');
+   ShowMessage(strNetwError);
    exit;
  end;
  FPHTTPClient.Free;
@@ -342,9 +342,9 @@ end;
  getfilelist(newfile,str);
  compfile(filein,newfile,filetoupdate);
 
- if filetoupdate.n=0 then ShowMessage('Все файлы обновлены') else
+ if filetoupdate.n=0 then ShowMessage(strAlredyRun) else
     begin
-     If filein.zyabvers<>newfile.zyabvers then  mes:='Доступна версия'+newfile.zyabvers+'. Установить?' else mes:='У вас новая версия, но доступны обнавления для некоторых файлов. Установить?';
+     If filein.zyabvers<>newfile.zyabvers then  mes:=strNewVers1+newfile.zyabvers+strNewVers2 else mes:=strFileUpdate;
      Case MessageDlg(mes,mtConfirmation,mbYesNo,0) of
      mrYes:DownloadNewVersion;
      end;

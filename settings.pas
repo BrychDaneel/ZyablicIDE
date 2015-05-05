@@ -32,6 +32,7 @@ type
     ListBox1: TListBox;
     Panel1: TPanel;
     procedure Button1Click(Sender: TObject);
+    procedure ComboBox1Change(Sender: TObject);
     procedure ComboBox1Select(Sender: TObject);
     procedure ComboBox2Change(Sender: TObject);
     procedure Edit1Change(Sender: TObject);
@@ -72,17 +73,24 @@ implementation
    end;
  end;
 
+procedure TSettingForm.ComboBox1Change(Sender: TObject);
+begin
+
+end;
+
 procedure TSettingForm.ComboBox1Select(Sender: TObject);
 begin
  Case ComboBox1.ItemIndex of
  0:MainForm.MainSynEdit.Highlighter:=MainForm.SynPasSyn1;
  1:MainForm.MainSynEdit.Highlighter:=MainForm.SynCppSyn1;
+ 2:MainForm.MainSynEdit.Highlighter:=nil;
  end;
 end;
 
 procedure TSettingForm.ComboBox2Change(Sender: TObject);
 begin
-  LoadLanguageFromFile('language'+slash+ComboBox2.Text+'.lng');
+  lang:=ComboBox2.Text;
+  LoadLanguageFromFile('languages'+slash+lang+'.lng');
 end;
 
 procedure TSettingForm.Edit1Change(Sender: TObject);
@@ -116,6 +124,8 @@ begin
 end;
 
 procedure TSettingForm.FormCreate(Sender: TObject);
+var
+  SearchRec:TSearchRec;
 begin
   Edit1.Text:=CompileCommand;
   Edit2.Text:=BuildCommand;
@@ -125,6 +135,25 @@ begin
   Edit6.Text:=email;
 
 
+  FindFirstUTF8('languages\*.lng',faAnyFile,SearchRec);
+
+  ComboBox2.Items.Clear;
+  repeat
+        ComboBox2.Items.Add(ExtractFileNameOnly(SearchRec.Name));
+       { If lang=ComboBox2.Items[ComboBox2.Items.Count-1] then
+        begin
+           ComboBox2.ItemIndex:=ComboBox2.Items.Count-1;
+           ComboBox2Change(Self);
+        end; }
+  until FindNextUTF8(SearchRec)<>0;
+
+
+  ComboBox1.ItemIndex:=synt;
+  ComboBox1Select(self);
+
+
+  LoadLanguageFromFile('languages'+slash+lang+'.lng');
+  ComboBox2.Text:=lang;
 end;
 
 procedure TSettingForm.FormShow(Sender: TObject);

@@ -17,13 +17,13 @@ begin
   Application.Initialize;
   Application.CreateForm(TMainForm, MainForm);
   Application.CreateForm(TGDBForm, GDBForm);
-  Application.CreateForm(TSettingForm, SettingForm);
   Application.CreateForm(TAnsiiTableForm, AnsiiTableForm);
   Application.CreateForm(TLienceForm, LienceForm);
   Application.CreateForm(TAboutForm, AboutForm);
   Application.CreateForm(TAtalonTestForm, AtalonTestForm);
   Application.CreateForm(TMultiTestForm, MultiTestForm);
   Application.CreateForm(TCalculatorForm, CalculatorForm);
+  Application.CreateForm(TSettingForm, SettingForm);
   Application.Run;
 end.
 

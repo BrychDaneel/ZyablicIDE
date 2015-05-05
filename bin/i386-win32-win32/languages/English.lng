@@ -1,0 +1,210 @@
+ZyblicIDE
+Terminal
+Input/Output
+Input File
+Output File
+File
+New
+Open
+-
+Save
+Save as
+Save all
+-
+Close
+Close all
+-
+Exit
+Editing
+Undo
+Redo
+-
+Cut
+Copy
+Paste
+Delete
+-
+Find
+Find Next
+Replace
+Program
+Compile
+Build
+-
+Start
+Stop
+Debug
+Step
+Step through
+Run to cursor
+-
+Value of variables
+GDB console
+Addition
+Calculator
+Table of symbols
+-
+Input-Output
+Files
+Keyboard emulation
+Console (without debugging)
+-
+Test against the standard
+Multitest
+-
+Settings
+Help
+Book
+-
+License (GPL)
+About the project
+?opy
+Past
+Cut
+Delete
+-
+Undo
+Redo
+-
+Find
+Find next
+Replace
+New tab
+Open file
+Close current
+GDB
+Table ANSII
+Symbol
+Code
+HEX
+License
+About the project
+Check for update
+Version:
+Platform:
+Test against the standard
+Program
+...
+Standard
+...
+Result
+Test
+Standard output
+Program output
+Start
+Consider space at the end of the lines
+Keyboard input
+Input from files
+Input file
+Output file
+Multitest
+Start
+Consider space at the end of the lines
+Keyboard input
+Input from files
+Input file
+Output file
+Program
+     Tests: 
+Calculator
+0
+
+Hexadecimal
+Binary
+Decimal
+
+Degrees
+Radians
+Settings
+Commands
+Build
+Run
+Debugger
+Compile
+Definitions
+$NAME
+$E-MAIL
+Editor
+Font
+Syntax
+Language
+
+Messages
+Watches
+Compiler messages 
+Can't stop application
+Can't read output
+The program was finish with error code: 
+In the program there was an asynchronous event
+Can't start the program
+Can't start the compiler
+Program is started
+Can't start GDB
+Successfully
+Compilation error
+Compilation...
+Keyboard emulation
+File 
+ not saved. Do you want to save?
+The program has been finish
+State:   
+| Line: 
+| Column: 
+| Select: 
+| Editing: insert 
+| Editing: replace
+| Status: save 
+| Status: not save 
+| Program: compilation
+| Program: debugging
+| Program: editing
+| Program: running
+
+Expression
+Value
+Notes
+
+Mathemat error
+
+Start
+Stop
+Can't start a standard 
+Can't start the program 
+Result
+It is too much lines
+It isn't enough lines
+Difference at the line ?.
+Success
+
+Test ?.
+Input
+Answer
+Output
+
+ (CPU-OS-Widgets)
+Version: Description file wasn't found
+Platform: Description file wasn't found
+Check for updating
+Loading: 
+verification of files...
+  STOP
+Updating was successfully loaded. Changes will be applied after exiting.
+Description file wasn't found. Updating is impossible. Use the official site for more details.
+It is impossible to connect with the source of updatings
+All files are updated
+New version is available
+. To install?
+You have a newest version, but there are updatings for some files. Do you want to install it?
+
+7
+%f - way to the current file
+%n - a file name without expansion
+%d - folder of the current file
+%t - temporary folder
+%z - ZyablicIDE folder
+$FILENAME - name with expansion
+$YEAR - current year
+
+
+ZyablicIDE - the small environment of rapid applications programming oriented for preparation to the Belarusian Republican competition in the Computer Science. This program is free software. 
+Program site: zyablicide.16mb.com. For communication with the developer use the e-mail: BrychDaneel@mail.ru                  

@@ -125,7 +125,6 @@ object SettingForm: TSettingForm
         '%t - временная папка'
       )
       ItemHeight = 15
-      ScrollWidth = 285
       TabOrder = 0
     end
     object Edit5: TLabeledEdit
@@ -206,7 +205,9 @@ object SettingForm: TSettingForm
       Items.Strings = (
         'Free Pascal'
         'C++'
+        '-'
       )
+      OnChange = ComboBox1Change
       OnSelect = ComboBox1Select
       Style = csDropDownList
       TabOrder = 1
@@ -230,7 +231,7 @@ object SettingForm: TSettingForm
       Width = 291
       ItemHeight = 15
       Items.Strings = (
-        'English'
+        ''
       )
       OnChange = ComboBox2Change
       Style = csDropDownList

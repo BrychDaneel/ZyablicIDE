@@ -17,6 +17,7 @@ type
     Memo2: TMemo;
     Panel1: TPanel;
     procedure FormShow(Sender: TObject);
+    procedure Memo2Change(Sender: TObject);
   private
     { private declarations }
   public
@@ -36,6 +37,11 @@ procedure TLienceForm.FormShow(Sender: TObject);
 begin
     (Sender as TForm).Left:=(Screen.Width - (Sender as TForm).Width) div 2;
   (Sender as TForm).Top:=(Screen.Height - (Sender as TForm).Height) div 2;
+end;
+
+procedure TLienceForm.Memo2Change(Sender: TObject);
+begin
+
 end;
 
 end.

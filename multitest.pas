@@ -73,7 +73,7 @@ If oldvalue<SpinEdit1.Value then
         begin
              Parent:=ScrollBox1;
              AutoSize:=true;
-             Caption:='Тест №'+IntToStr(i);
+             Caption:=strTest+IntToStr(i);
 
              InputArray[i]:=TSynEdit.Create(PanArray[i]);
              with InputArray[i] do
@@ -82,7 +82,7 @@ If oldvalue<SpinEdit1.Value then
                   Width:=IOWidth;
                   Height:=IOHeight;
                   Gutter.Parts.Part[0].Free;
-                  Text:='Ввод';
+                  Text:=strInput;
              end;
 
              AnswerArray[i]:=TSynEdit.Create(PanArray[i]);
@@ -93,7 +93,7 @@ If oldvalue<SpinEdit1.Value then
                   Height:=IOHeight;
                   Gutter.Parts.Part[0].Free;
                   Top:=IOHeight;
-                  Text:='Ответ';
+                  Text:=strAnswer;
              end;
 
              OutputArray[i]:=TSynEdit.Create(PanArray[i]);
@@ -104,7 +104,7 @@ If oldvalue<SpinEdit1.Value then
                   Height:=IOHeight;
                   Gutter.Parts.Part[0].Free;
                   Top:=IOHeight*2;
-                  Text:='Вывод';
+                  Text:=strOutput;
              end;
         end;
    end
@@ -133,8 +133,8 @@ PanArray[TestNumber].Color:=clBlue;
 try
     TestProcess.Execute;
 except
-  ShowMessage('Невозможно запустить программу '+TestProcess.CommandLine);
-  Button3.Caption:='Запуск';
+  ShowMessage(StrCantRunProg+TestProcess.CommandLine);
+  Button3.Caption:=strStart;
   TestNumber:=0;
   exit;
 end;
@@ -230,7 +230,7 @@ begin
         DeleteFileUTF8(fo);
    end;
    TestOutputTimer.Enabled:=false;
-   Button3.Caption:='Запуск';
+   Button3.Caption:=strStart;
    TestNumber:=0;
 end else
     NextTest;
@@ -249,7 +249,7 @@ begin
 
   for i:=1 to SpinEdit1.Value do
       PanArray[i].Color:=clDefault;
-   Button3.Caption:='Остановить';
+   Button3.Caption:=strStop;
 
    TestProcess.CommandLine:=AddDefines(FileNameEdit1.Text);
    TestProcess.CurrentDirectory:=ExtractFileDir(TestProcess.Executable);
@@ -264,7 +264,7 @@ begin
    TestProcess.Terminate(0);
    PanArray[TestNumber].Color:=clDefault;
    TestNumber:=0;
-   Button3.Caption:='Запуск';
+   Button3.Caption:=strStart;
   end;
 end;
 

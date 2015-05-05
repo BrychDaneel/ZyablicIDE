@@ -121,7 +121,7 @@ var
 implementation
 {$R *.lfm}
 
-
+ uses Main;
 Function IntToBin(a: int64): String;
 var
    ot: boolean;
@@ -394,7 +394,7 @@ end;
   value1:=0;
   itsmy:=false;
   op:=0;
-  ShowMessage('Математическая ошибка');
+  ShowMessage(strMathError);
   exit;
   end;
 

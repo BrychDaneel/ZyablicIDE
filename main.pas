@@ -320,6 +320,25 @@ var
    slash:string='/';
    {$ENDIF}
 
+
+
+  var
+    strMes,strWatch,strCompMes,strCantStopApp,strCantOutput,StrExitCode,
+    strAsync,StrCantStartApp,strCantStartComp,strAlredyRun, strCantStartGDB,
+    strSucsess,strCompError, strCompiling, strKeybord,strFileNoSave1,strFileNosave2,
+    strAppStop, strState, strRow,strCol,strSel,strInsert,strReplace, strSave,
+    strNoSave, strStateComp,strStateDeb,strStateEdit,strStateRun,
+    strWatchInp, strWatchValue, strWatchAdition,
+    strMathError, strStart, strStop,StrCantRunAtal,StrCantRunProg,strVerd,
+    strFew, strMany, strDif, strPass,
+    strTest, strInput,strOutput,strAnswer,
+    strCP_OS_WJ, strVersion,strPlatform, strCheckUpd, strDownload,strFileCheck,strSTOPSTOP,
+    strUpdateWasDown, strCantFound, strNetwError,strAlreadyUpdate, strNewVers1,strNewVers2,
+    strFileUpdate: string;
+
+    lang:string='English';
+    synt:longint;
+
 implementation
  uses GDBIO,settings,ansiitable,lience,about,AtalonTest,Multitest, calculator;
 {$R *.lfm}
@@ -395,14 +414,14 @@ var prpath:string;
 
   prpath:=ExtractFileDir(ParamStr(0));
 
-  {$IFDEF WINDWOS}
-  CompileCommand:='bin'+slash+'fpc.exe -g -l -Cr -vwne -WC -FE"%t" "%f"';
-  BuildCommand:='bin'+slash+'fpc.exe -vwne -WC "%f"';
-  RunComand:='"%t'+slash+'%n.exe"';
-  GdbComand:='bin'+slash+'gdb.exe -q -f';
+  {$IFDEF WINDOWS}
+  CompileCommand:='bin'+slash+'fpc -g -l -Cr -vwne -WC -FE"%t" "%f"';
+  BuildCommand:='bin'+slash+'fpc -vwne -O2 -WC "%f"';
+  RunComand:='"%t'+slash+'%n"';
+  GdbComand:='bin'+slash+'gdb -q -f';
   {$ELSE}
   CompileCommand:='bin'+slash+'fpc -g -l -Cr -vwne -FE%t "%f"';
-  BuildCommand:='bin'+slash+'fpc -vwne "%f"';
+  BuildCommand:='bin'+slash+'fpc -vwne -O2 "%f"';
   RunComand:='"%t'+slash+'%n"';
   GdbComand:='gdb -q -f';
   {$ENDIF}
@@ -431,7 +450,8 @@ var prpath:string;
      If par=LowerCase('GdbComand') then  GdbComand:=val;
      if par=LowerCase('NAME') then youname:=val;
      if par=LowerCase('E-MAIL') then email:=val;
-     if par=LowerCase('Syntax') then email:=val;
+     if par=LowerCase('Syntax') then synt:=StrToInt(val);
+     if par=LowerCase('Language') then lang:=val;
      end;
   pr.Free;
  end;
@@ -441,6 +461,8 @@ begin
      s:=ParamStrUTF8(i);
      OpenFile(s);
 end;
+
+
 
 end;
 
@@ -472,7 +494,7 @@ begin
   sleep(50);
   Application.ProcessMessages;
   inc(w);
-  If w>100 then begin ShowMessage('Невозможно завершить приложение'); exit end;
+  If w>100 then begin ShowMessage(strCantStopApp); exit end;
   end;
 
   w:=1;
@@ -481,7 +503,7 @@ begin
   sleep(50);
   Application.ProcessMessages;
   inc(w);
-  If w>100 then begin ShowMessage('Невозможно прочитать вывод'); exit end;
+  If w>100 then begin ShowMessage(strCantOutput); exit end;
   end;
 
 
@@ -506,7 +528,7 @@ begin
 
   until (rd) or (w>100);
 
-  if not rd then  begin ShowMessage('Невозможно прочитать вывод'); exit end;
+  if not rd then  begin ShowMessage(strCantOutput); exit end;
 
 
 end;
@@ -556,15 +578,26 @@ var s,ss,per:string;
      i, ii, code :longint;
 begin
   s:=readOutputData(GDBProcess);
-  PrintGDB(s);
+
 
   while s<>'' do
   begin
   ParseByLine(s,ss);
 
-  If pos('in __mingw_CRTStartup ()',ss)<>0 then WriteGDB('n');
 
   if ss='' then Continue;
+
+  PrintGDB(ss);
+
+
+  If pos('No executable specified',ss)<>0 then
+  begin
+       MessageSynMemo.Lines.Add(StrCantStartApp);
+       MessageSynMemo.CaretY:=MessageSynMemo.Lines.Count;
+       GDBMessageTimer.Enabled:=false;
+  end;
+
+  If pos('in __mingw_CRTStartup ()',ss)<>0 then WriteGDB('n');
 
   if (pos('exited with code',ss)<>0) then
   begin
@@ -577,7 +610,7 @@ begin
   GDBMessageTimer.Enabled:=false;
 
 
-  If code<>0 then ShowMessage('Программа завершилась с кодом ошибки: '+IntToStr(code));
+  If code<>0 then ShowMessage(StrExitCode+IntToStr(code));
   end else
 
   If pos(#26#26,ss)<>0 then breakline(copy(ss,pos(#26#26,ss),length(ss)-pos(#26#26,ss)+1)) else
@@ -596,7 +629,7 @@ begin
   begin
   crash:=true;
   UpdateWatch;
-  ShowMessage('В программе возникло асинхронное событие');
+  ShowMessage(strAsync);
   end else
 
   if  (not GDBProcess.Running) or (pos('exited normally',ss)<>0) then
@@ -710,6 +743,8 @@ function ReadOutputData(process:TProcess):string;
 begin
 readOutputData:='';
 while Process.Output.NumBytesAvailable<>0 do  readOutputData+=char(Process.Output.ReadByte);
+if Process.Stderr<>nil then
+   while Process.Stderr.NumBytesAvailable<>0 do  readOutputData+=char(Process.Stderr.ReadByte);
 ReadOutputData:=SysToUTF8(ReadOutputData);
 end;
 
@@ -743,7 +778,7 @@ RunProcess.CurrentDirectory:=ExtractFileDir(Allfile[sel].fullpath);
 try
 RunProcess.Execute;
 except
-  ShowMessage('Невозможно запустить программу');
+  ShowMessage(StrCantStartApp);
     SetRunButtons(true,false);
     wantdebug:=false;
 wantcursor:=false;
@@ -751,7 +786,7 @@ wantcursor:=false;
 end;
 wantcursor:=false;
 RunMessageTimer.Enabled:=true;
-TerminalMemo.Lines.Add('Программа запущена');
+TerminalMemo.Lines.Add(strAlredyRun);
 exit;
 end;
 
@@ -760,7 +795,7 @@ GDBProcess.CurrentDirectory:=ExtractFileDir(Allfile[sel].fullpath);
 try
 GDBProcess.Execute;
 except
-  ShowMessage('Невозможно запустить GDB');
+  ShowMessage(strCantStartGDB);
   SetRunButtons(true,false);
   wantdebug:=false;
 wantcursor:=false;
@@ -873,7 +908,7 @@ if not CompProcess.Running then
 begin
 CompilMessageTimer.Enabled:=false;
 State:=wpsEdit;
-If CompProcess.ExitStatus=0 then MessageSynMemo.Lines.Add('Успешно') else begin  MessageSynMemo.Lines.Add('Ошибка компиляции');   SetRunButtons(true,false); wantcursor:=false; wantdebug:=false; UnLockInterface;  end;
+If CompProcess.ExitStatus=0 then MessageSynMemo.Lines.Add(strSucsess) else begin  MessageSynMemo.Lines.Add(strCompError);   SetRunButtons(true,false); wantcursor:=false; wantdebug:=false; UnLockInterface;  end;
 If (errorLine=-1) then MessageSynMemo.CaretY:=MessageSynMemo.Lines.Count;
 If WaitForExecute then
 begin
@@ -944,6 +979,8 @@ begin
   pr.Add('GdbComand='+GdbComand);
   pr.Add('NAME='+youname);
   pr.Add('E-MAIL='+email);
+  pr.Add('Syntax='+IntToStr(SettingForm.ComboBox1.ItemIndex));
+  pr.Add('Language='+lang);
 
   pr.SaveToFile('setings.ini');
   pr.Free;
@@ -1095,9 +1132,17 @@ LockInterface;
 errorLine:=-1;
 State:=wpsCompil;
 MessageSynMemo.Lines.Clear;
-MessageSynMemo.Lines.Add('Компиляция...');
+MessageSynMemo.Lines.Add(strCompiling);
 CompProcess.CommandLine:=AddDefines(BuildCommand);
+try
 CompProcess.Execute;
+except
+ MessageSynMemo.Lines.Add(strCantStartComp);
+ State:=wpsEdit;
+ UnLockInterface;
+ SetRunButtons(TRUE,FALSE);
+ exit;
+end;
 CompilMessageTimer.Enabled:=true;
 end;
 
@@ -1143,9 +1188,9 @@ begin
     TerminalGroupBox.Visible:=false;
     IOGroupBox.BringToFront;
     InputNameEdit.Enabled:=false;
-    InputNameEdit.Text:='Эмуляция клавиатуры';
+    InputNameEdit.Text:=strKeybord;
     OutputNameEdit.Enabled:=false;
-    OutputNameEdit.Text:='Эмуляция клавиатуры';
+    OutputNameEdit.Text:=strKeybord;
 end;
 
 procedure TMainForm.MenuItemInputFileClick(Sender: TObject);
@@ -1254,7 +1299,7 @@ CloseCarefully:=true;
 Reselect(index);
 
 if (not AllFile[index].saved) and (not AllFile[index].empty) then
-Case MessageDlg('Файл '+AllFile[index].name+' не сохранён. Сохранить?',mtConfirmation,mbYesNoCancel,0) of
+Case MessageDlg(strFileNoSave1+AllFile[index].name+strFileNosave2,mtConfirmation,mbYesNoCancel,0) of
 mrYes:begin SaveFile(index); if  AllFile[index].saved then Closefile(index); end;
 mrNo:Closefile(index);
 mrCancel:CloseCarefully:=false;
@@ -1293,15 +1338,16 @@ LockInterface;
 errorLine:=-1;
 State:=wpsCompil;
 MessageSynMemo.Lines.Clear;
-MessageSynMemo.Lines.Add('Компиляция...');
+MessageSynMemo.Lines.Add(strCompiling);
 CompProcess.CommandLine:=AddDefines(CompileCommand);
 MessageSynMemo.Lines.Add(CompProcess.CommandLine);
 try
 CompProcess.Execute;
 except
- MessageSynMemo.Lines.Add('Невозможно запустить компилятор');
+ MessageSynMemo.Lines.Add(strCantStartComp);
  State:=wpsEdit;
  UnLockInterface;
+ SetRunButtons(TRUE,FALSE);
  exit;
 end;
 CompilMessageTimer.Enabled:=true;
@@ -1650,7 +1696,9 @@ procedure TMainForm.MessageSynMemoSpecialLineColors(Sender: TObject;
   Line: integer; var Special: boolean; var FG, BG: TColor);
 begin
 
-  if (pos('error:',lowercase(MessageSynMemo.Lines[line-1]))<>0) or  (pos('fatal:',lowercase(MessageSynMemo.Lines[line-1]))<>0) or (pos('Ошибка компиляции',MessageSynMemo.Lines[line-1])<>0) then
+  if (pos('error:',lowercase(MessageSynMemo.Lines[line-1]))<>0) or (strCantStartComp=MessageSynMemo.Lines[line-1])
+  or  (StrCantStartApp=MessageSynMemo.Lines[line-1])
+  or  (pos('fatal:',lowercase(MessageSynMemo.Lines[line-1]))<>0) or (pos(strCompError,MessageSynMemo.Lines[line-1])<>0) then
   begin
   Special:=true;
   fg:=clRed;
@@ -1662,7 +1710,7 @@ begin
   fg:=clBlue;
   end;
 
-  If pos('Успешно',MessageSynMemo.Lines[line-1])<>0 then
+  If pos(strSucsess,MessageSynMemo.Lines[line-1])<>0 then
   begin
   Special:=true;
   fg:=clgreen;
@@ -1700,7 +1748,7 @@ begin
   UnLockInterface;
   MainSynEdit.Invalidate;
   state:=wpsEdit;
-  TerminalMemo.Lines.Add('Программа завершилась');
+  TerminalMemo.Lines.Add(strAppStop);
 end;
 
 procedure TMainForm.RunMessageTimerTimer(Sender: TObject);
@@ -1805,7 +1853,7 @@ end;
 
 while UTF8pos('%d',s)<>0 do
 begin
-q:=UTF8pos('%f',s);
+q:=UTF8pos('%d',s);
 UTF8Delete(s,q,2);
 UTF8Insert(ExtractFileDir(AllFile[sel].fullpath),s,q);
 end;
@@ -1871,17 +1919,17 @@ begin
 If InputSynEdit.Focused then th:=InputSynEdit else
 If OutputSynEdit.Focused then th:=OutputSynEdit else
    th:=MainSynEdit;
-s:='Состояние:   ';
-s+='| Строка: '+inttostr(th.CaretY)+' ';
-s+='| Столбец: '+inttostr(th.CaretX)+' ';
-s+='| Выделенно: '+inttostr(length(th.SelText))+' ';
-If th.InsertMode then s+='| Редактирование: вставка ' else s+='| Редактирование: замена ';
-If AllFile[sel].saved then s+='| Статус: сохранён ' else s+='| Статус: не сохранён ';
+s:=strState;
+s+=strRow+inttostr(th.CaretY)+' ';
+s+=strCol+inttostr(th.CaretX)+' ';
+s+=strSel+inttostr(length(th.SelText))+' ';
+If th.InsertMode then s+=strInsert else s+=strReplace;
+If AllFile[sel].saved then s+=strSave else s+=strNoSave;
 case State of
-wpsCompil: s+='| Программа: компилирование';
-wpsDebug: s+='| Программа: отладка';
-wpsEdit: s+='| Программа: редактирование';
-wpsRun: s+='| Программа: запущено';
+wpsCompil: s+=strStateComp;
+wpsDebug: s+=strStateDeb;
+wpsEdit: s+=strStateEdit;
+wpsRun: s+=strStateRun;
 end;
 Status.SimpleText:=s;
 end;
@@ -1961,7 +2009,7 @@ inc(nb);
 end;
 
 procedure LoadLanguageFromFile(Source:string);
-var i,ii,u:longint;
+var i,ii,u,q:longint;
     str:TStringListUTF8;
     th:TComponent;
 begin
@@ -2041,7 +2089,98 @@ begin
              {$B+}
         end;
      end;
+
+    gettext(str,u);
+    strMes:=gettext(str,u);
+    MainForm.BotonTabControl.Tabs[0]:=strMes;
+    strWatch:=gettext(str,u);
+    MainForm.BotonTabControl.Tabs[1]:=strWatch;
+    strCompMes:=gettext(str,u);
+    MainForm.MessageSynMemo.Text:=strCompMes;
+    strCantStopApp:=gettext(str,u);
+    strCantOutput:=gettext(str,u);
+    StrExitCode:=gettext(str,u);
+    strAsync:=gettext(str,u);
+    StrCantStartApp:=gettext(str,u);
+    strCantStartComp:=gettext(str,u);
+    strAlredyRun:=gettext(str,u);
+    strCantStartGDB:=gettext(str,u);
+    strSucsess:=gettext(str,u);
+    strCompError:=gettext(str,u);
+    strCompiling:=gettext(str,u);
+    strKeybord:=gettext(str,u);
+    strFileNoSave1:=gettext(str,u);
+    strFileNosave2:=gettext(str,u);
+    strAppStop:=gettext(str,u);
+    strState:=gettext(str,u);
+    strRow:=gettext(str,u);
+    strCol:=gettext(str,u);
+    strSel:=gettext(str,u);
+    strInsert:=gettext(str,u);
+    strReplace:=gettext(str,u);
+    strSave:=gettext(str,u);
+    strNoSave:=gettext(str,u);
+    strStateComp:=gettext(str,u);
+    strStateDeb:=gettext(str,u);
+    strStateEdit:=gettext(str,u);
+    strStateRun:=gettext(str,u);
+    gettext(str,u);
+
+    strWatchInp:=gettext(str,u);
+    MainForm.WatchGrid.Cells[0,0]:=strWatchInp;
+    MainForm.WatchGrid.Cells[2,0]:=strWatchInp;
+    strWatchValue:=gettext(str,u);
+    MainForm.WatchGrid.Cells[1,0]:=strWatchValue;
+    MainForm.WatchGrid.Cells[3,0]:=strWatchValue;
+    strWatchAdition:=gettext(str,u);
+    MainForm.WatchGrid.Cells[4,0]:=strWatchAdition;
+
+    gettext(str,u);
+    strMathError:=gettext(str,u);
+    gettext(str,u);
+    strStart:=gettext(str,u);
+    strStop:=gettext(str,u);
+    StrCantRunAtal:=gettext(str,u);
+    StrCantRunProg:=gettext(str,u);
+    strVerd:=gettext(str,u);
+    strMany:=gettext(str,u);
+    strFew:=gettext(str,u);
+    strDif:=gettext(str,u);
+    strPass:=gettext(str,u);
+    gettext(str,u);
+    strTest:=gettext(str,u);
+    strInput:=gettext(str,u);
+    strAnswer:=gettext(str,u);
+    strOutput:=gettext(str,u);
+    gettext(str,u);
+    strCP_OS_WJ:=gettext(str,u);
+    strVersion:=gettext(str,u);
+    strPlatform:=gettext(str,u);
+    strCheckUpd:=gettext(str,u);
+    strDownload:=gettext(str,u);
+    strFileCheck:=gettext(str,u);
+    strSTOPSTOP:=gettext(str,u);
+    strUpdateWasDown:=gettext(str,u);
+    strCantFound:=gettext(str,u);
+    strNetwError:=gettext(str,u);
+    strAlreadyUpdate:=gettext(str,u);
+    strNewVers1:=gettext(str,u);
+    strNewVers2:=gettext(str,u);
+    strFileUpdate:=gettext(str,u);
+    gettext(str,u);
+
+    SettingForm.ListBox1.Items.Clear;
+    q:=StrToInt(gettext(str,u));
+    for i:=1 to q do
+        SettingForm.ListBox1.AddItem(gettext(str,u),nil);
+    gettext(str,u);
+    AboutForm.Memo1.Lines.Clear;
+    while u<str.Count do
+        AboutForm.Memo1.Lines.Add(gettext(str,u));
+
     str.Free;
+
+    MainForm.UpdateState;
 end;
 
 

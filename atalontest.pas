@@ -114,21 +114,21 @@ while (SynEdit2.Lines[i]=SynEdit3.Lines[i]) and (i<SynEdit2.Lines.Count)  and (i
 If  SynEdit3.Lines.Count<SynEdit2.Lines.Count then
 begin
 Panel2.Color:=clRed;
-Panel2.Caption:='Слишком много строк';
+Panel2.Caption:=strMany;
 end else
 If  SynEdit3.Lines.Count<SynEdit2.Lines.Count then
 begin
 Panel2.Color:=clRed;
-Panel2.Caption:='Слишком мало строк';
+Panel2.Caption:=strFew;
 end else
 if (SynEdit2.Lines[i]<>SynEdit3.Lines[i]) then
 begin
 Panel2.Color:=clRed;
-Panel2.Caption:='Расхождение в строке №'+IntToStr(i+1);
+Panel2.Caption:=strDif+IntToStr(i+1);
 end else
 begin
 Panel2.Color:=clGreen;
-Panel2.Caption:='Совпадение';
+Panel2.Caption:=strPass;
 end
 
 end;
@@ -147,7 +147,7 @@ end;
 procedure TAtalonTestForm.Timer1StopTimer(Sender: TObject);
 begin
   If Process1.Running then Process1.Terminate(0);
-  Button3.Caption:='Запуск';
+  Button3.Caption:=strStart;
 end;
 
 procedure TAtalonTestForm.Timer1Timer(Sender: TObject);
@@ -186,8 +186,8 @@ begin
         try
       Process1.Execute;
    except
-     ShowMessage('Невозможно запустить эталон '+Process1.CommandLine);
-     Button3.Caption:='Запуск';
+     ShowMessage(StrCantRunAtal+Process1.CommandLine);
+     Button3.Caption:=strStart;
      want2:=false;
      exit;
    end;
@@ -234,11 +234,11 @@ procedure TAtalonTestForm.Button3Click(Sender: TObject);
 var s:string;
 begin
 Panel2.Color:=clDefault;
-Panel2.Caption:='Вердикт';
+Panel2.Caption:=strVerd;
 
   If not Process1.Running then
   begin
-   Button3.Caption:='Остановить';
+   Button3.Caption:=strStop;
    want2:=true;
    Process1.CommandLine:=AddDefines(Edit1.Text);
    Process1.CurrentDirectory:=ExtractFileDir(Process1.Executable);
@@ -250,8 +250,8 @@ Panel2.Caption:='Вердикт';
       try
       Process1.Execute;
    except
-     ShowMessage('Невозможно запустить программу '+Process1.CommandLine);
-     Button3.Caption:='Запуск';
+     ShowMessage(StrCantRunProg+Process1.CommandLine);
+     Button3.Caption:=strStart;
      exit;
    end;
 
@@ -277,7 +277,7 @@ Panel2.Caption:='Вердикт';
 
    Timer1.Enabled:=false;
    want2:=false;
-   Button3.Caption:='Запуск';
+   Button3.Caption:=strStart;
   end;
 end;
 
