@@ -100,4 +100,8 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-lib/*
+/lib
+/zup/lib
+
+! /bin
+
