@@ -392,8 +392,9 @@ var prpath:string;
      par,val,s:string;
      i,q:longint;
  begin
-  ForceDirectoriesUTF8(AddDefines('%t'));
   SetCurrentDirUTF8(ExtractFilePath(ParamStrUTF8(0)));
+  ForceDirectoriesUTF8(AddDefines('%t'));
+
 
   FileCount:=1;
   sel:=1;
@@ -988,11 +989,6 @@ begin
   If wantUpdate then
   begin
 
-  {$IFDEF Windows}
-  UpdateProcess.Executable:='zup.exe';
-  {$ELSE}
-  UpdateProcess.Executable:='zup';
-  {$ENDIF}
   for i:=1 to filetoupdate.n do
       If  pos('zup',filetoupdate.f[i].name)=0 then
       begin
@@ -1002,7 +998,10 @@ begin
   UpdateProcess.Parameters.Add(ExtractFileName(ParamStr(0)));
 
   UpdateProcess.Execute;
+   { while  UpdateProcess.Running do sleep(100);
+  ShowMessage(ReadOutputData(UpdateProcess));}    //for debuging zup
   end;
+
 
 end;
 
@@ -2174,12 +2173,14 @@ begin
     for i:=1 to q do
         SettingForm.ListBox1.AddItem(gettext(str,u),nil);
     gettext(str,u);
+    gettext(str,u);
     AboutForm.Memo1.Lines.Clear;
     while u<str.Count do
         AboutForm.Memo1.Lines.Add(gettext(str,u));
 
     str.Free;
 
+    AboutForm.FormCreate(MainForm);
     MainForm.UpdateState;
 end;
 

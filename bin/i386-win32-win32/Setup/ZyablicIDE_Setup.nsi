@@ -106,6 +106,7 @@ Section "!ZyablicIDE" SEC001
   File "${CODE_PATCH}\bin\i386-win32-win32\ZyablicIDE.exe"
   SetOutPath "$INSTDIR\ico"
   File "${CODE_PATCH}\bin\i386-win32-win32\ico\text-pascal.ico"
+  File "${CODE_PATCH}\bin\i386-win32-win32\ico\text-c++.ico"
   SetOutPath "$INSTDIR\languages"
   File "${CODE_PATCH}\bin\i386-win32-win32\languages\English.lng"
   File "${CODE_PATCH}\bin\i386-win32-win32\languages\Русский.lng"
@@ -137,6 +138,12 @@ Section "PAS file association" SEC004
   SetOutPath "$INSTDIR"
   ${registerExtension} "$INSTDIR\ZyablicIDE.exe" ".pas" "ZyablicIDE.pas"
 WriteRegStr "HKCR" "ZyablicIDE.pas\DefaultIcon" "" "$INSTDIR\ico\text-pascal.ico"
+SectionEnd
+
+Section "C++ file association" SEC005
+  SetOutPath "$INSTDIR"
+  ${registerExtension} "$INSTDIR\ZyablicIDE.exe" ".cpp" "ZyablicIDE.cpp"
+WriteRegStr "HKCR" "ZyablicIDE.cpp\DefaultIcon" "" "$INSTDIR\ico\text-c++.ico"
 SectionEnd
 
 Function .onInit
@@ -194,6 +201,7 @@ SectionEnd
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC002} "GNU Debuger 6.8"
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC003} "FreePascal Compiler2.6.4 without any unit"
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC004} "Associate Pascal File with ZyablicIDE"
+  !insertmacro MUI_DESCRIPTION_TEXT ${SEC005} "Associate C++ File with ZyablicIDE"
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 Function un.onUninstSuccess
@@ -231,7 +239,10 @@ Section Uninstall
   RMDir "$INSTDIR\bin"
 
   ${unregisterExtension} ".pas" "ZyablicIDE.pas"
-DeleteRegValue "HKCR" "ZyablicIDE.pas\DefaultIcon" "Default"
+;DeleteRegValue "HKCR" "ZyablicIDE.pas\DefaultIcon" "Default"
+
+  ${unregisterExtension} ".cpp" "ZyablicIDE.cpp"
+;DeleteRegValue "HKCR" "ZyablicIDE.cpp\DefaultIcon" "Default"
 
   Delete "$INSTDIR\uninst.exe"
   RMDir "$INSTDIR"

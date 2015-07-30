@@ -101,6 +101,8 @@ begin
 
      for i:=0 to URL.Count-1 do
      begin
+
+          IF ExtractFilePath(FileName[i])<>'' THEN ForceDirectoriesUTF8(ExtractFilePath(FileName[i]));
           Stream:=TFileStreamUTF8.Create(FileName[i],fmCreate);
           Try
             FPHTTPClient.SimpleGet(URL[i],stream);
@@ -206,13 +208,13 @@ var stream:TStream;
   str:TStringListUTF8;
   s:string;
 begin
-If FileExistsUTF8('version.inf') then
-begin
-  str:=TStringListUTF8.Create;
-  LoadStringsFromFileUTF8(str,'version.inf');
-  getfilelist(filein,str);
-  Label1.Caption:=Label1.Caption+filein.zyabvers;
-  Label2.Caption:=Label2.Caption+filein.platform+strCP_OS_WJ;
+  If FileExistsUTF8('version.inf') then
+  begin
+       str:=TStringListUTF8.Create;
+       LoadStringsFromFileUTF8(str,'version.inf');
+       getfilelist(filein,str);
+       Label1.Caption:=copy(strVersion,1,pos(' ',strVersion))+filein.zyabvers;
+       Label2.Caption:=copy(strPlatform,1,pos(' ',strPlatform))+filein.platform+strCP_OS_WJ;
   end else
   begin
        Label1.Caption:=strVersion;
@@ -264,6 +266,7 @@ begin
          upfile.Add(filetoupdate.f[i].name);
      url.Add(filetoupdate.updatesource+filetoupdate.platform+'/'+filetoupdate.f[i].name);
      end;
+
 
      DownloadThread:=TDownloadThread.Create(true);
      DownloadThread.FreeOnTerminate:=true;
@@ -342,7 +345,7 @@ end;
  getfilelist(newfile,str);
  compfile(filein,newfile,filetoupdate);
 
- if filetoupdate.n=0 then ShowMessage(strAlredyRun) else
+ if filetoupdate.n=0 then ShowMessage(strAlreadyUpdate) else
     begin
      If filein.zyabvers<>newfile.zyabvers then  mes:=strNewVers1+newfile.zyabvers+strNewVers2 else mes:=strFileUpdate;
      Case MessageDlg(mes,mtConfirmation,mbYesNo,0) of

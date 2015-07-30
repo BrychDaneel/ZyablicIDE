@@ -213,7 +213,7 @@ begin
     If deleteIO then sleep(100);
     end;
     end;
-   ShowMessage(SynEdit2.Text);
+  // ShowMessage(SynEdit2.Text);
    Test;
   end;
 

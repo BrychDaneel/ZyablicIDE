@@ -676,28 +676,30 @@ object MainForm: TMainForm
         TabOrder = 0
         object InputCaptionPanel: TPanel
           Left = 1
-          Height = 34
+          Height = 31
           Top = 1
           Width = 281
           Align = alTop
-          ClientHeight = 34
+          ClientHeight = 31
           ClientWidth = 281
           TabOrder = 0
           object InputLabel: TLabel
             Left = 1
-            Height = 32
+            Height = 29
             Top = 1
-            Width = 78
+            Width = 103
             Align = alLeft
+            Alignment = taCenter
+            AutoSize = False
             Caption = 'Входной файл'
             Layout = tlCenter
             ParentColor = False
           end
           object InputNameEdit: TEdit
-            Left = 79
-            Height = 32
+            Left = 104
+            Height = 29
             Top = 1
-            Width = 201
+            Width = 176
             Align = alClient
             OnChange = InputNameEditChange
             TabOrder = 0
@@ -707,8 +709,8 @@ object MainForm: TMainForm
         inline InputSynEdit: TSynEdit
           Cursor = crDefault
           Left = 1
-          Height = 183
-          Top = 35
+          Height = 186
+          Top = 32
           Width = 281
           Align = alClient
           Font.CharSet = ANSI_CHARSET
@@ -1236,17 +1238,19 @@ object MainForm: TMainForm
             Left = 1
             Height = 29
             Top = 1
-            Width = 87
+            Width = 103
             Align = alLeft
+            Alignment = taCenter
+            AutoSize = False
             Caption = 'Выходной файл'
             Layout = tlCenter
             ParentColor = False
           end
           object OutputNameEdit: TEdit
-            Left = 88
+            Left = 104
             Height = 29
             Top = 1
-            Width = 192
+            Width = 176
             Align = alClient
             OnChange = OutputNameEditChange
             TabOrder = 0
@@ -7216,7 +7220,8 @@ object MainForm: TMainForm
   object UpdateProcess: TProcessUTF8
     PipeBufferSize = 1048576
     Active = False
-    Options = [poNewProcessGroup]
+    Executable = 'zup'
+    Options = [poUsePipes, poNewProcessGroup]
     Priority = ppNormal
     StartupOptions = [suoUseShowWindow]
     ShowWindow = swoHIDE

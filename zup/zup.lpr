@@ -24,14 +24,19 @@ begin
  pop:=0;
  q:=ParamStr(i*2+1);
  qq:=ParamStr(i*2+2);
+
+ b:=true;
+ If not FileExists(qq) then writeln('File '+qq+' does not exist') else
  repeat
- inc(pop);
- WriteLn('Deleting File '+qq);
- b:=DeleteFile(qq);
- If b then WriteLn('Sucsess') else    begin
-   WriteLn('Error');
-    sleep(100);
-   end;
+       inc(pop);
+       WriteLn('Deleting File '+qq);
+
+       b:=DeleteFile(qq);
+       If b then WriteLn('Sucsess') else
+       begin
+           WriteLn('Error');
+           sleep(100);
+       end;
  until b or (pop>maxpop);
 
  If not b then
